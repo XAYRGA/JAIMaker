@@ -147,7 +147,15 @@ namespace JaiMaker
                 {
                     if (CurrentIBNK.Instruments[i] != null)
                     {
-                        progList.Items.Add("Program " + (i));
+                     
+                        if (CurrentIBNK.Instruments[i].IsPercussion)
+                        {
+                            progList.Items.Add("(PRC)Program " + (i));
+                        } else
+                        {
+                            progList.Items.Add("Program " + (i));
+                        }
+
 
                         progMap[progidx] = i;
                         progidx++;
