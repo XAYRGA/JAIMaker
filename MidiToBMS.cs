@@ -220,7 +220,7 @@ namespace JaiMaker
             bw.Write((byte)0xFD);
             bw.Write((ushort)wtf.TicksPerBeatOrFrame);
             bw.Write((byte)0xFE);
-            bw.Write((ushort)120);
+            bw.Write((ushort)Root.Tempo);
             bw.Write((byte)0x88);
             bw.Write((ushort)0xFFFA);
             bw.Write((byte)0x88);

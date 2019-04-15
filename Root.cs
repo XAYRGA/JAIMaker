@@ -27,6 +27,8 @@ namespace JaiMaker
         public static int keyOffset = 0;
         public static int[] instrumentBanks = new int[1024];
         public static int[] programs = new int[1024];
+        public static int Tempo = 120;
+
 
         
         [STAThread]

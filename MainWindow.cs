@@ -318,5 +318,10 @@ namespace JaiMaker
                 MessageBox.Show("Failed opening BAA\n" + E.ToString(), "ugh");
             }
         }
+
+        private void numericUpDown33_ValueChanged(object sender, EventArgs e)
+        {
+            Root.Tempo = (int)numericUpDown33.Value;
+        }
     }
 }
