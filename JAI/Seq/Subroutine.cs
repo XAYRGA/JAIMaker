@@ -410,6 +410,7 @@ namespace JaiSeqX.JAI.Seq
                     case 0xCC:
                         skip(2);
                         return JaiEventType.UNKNOWN;
+                    case 0xCD: // I've only seen this used in the IPL / BIOS sequence
                     case 0xCF:
                         skip(1);
                         return JaiEventType.UNKNOWN;

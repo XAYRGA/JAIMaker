@@ -323,5 +323,10 @@ namespace JaiMaker
         {
             Root.Tempo = (int)numericUpDown33.Value;
         }
+
+        private void mainControls_Paint_2(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

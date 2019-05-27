@@ -165,6 +165,7 @@ namespace JaiSeqX.JAI
                 byte cbyte = 0;
                 sbyte[] nibbles;
 
+
                 for (size_rem = (int)vsize; size_rem >= framesz; size_rem -= framesz)
                 {
                     wavin = fobj_reader.ReadBytes(framesz);
