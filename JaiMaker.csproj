@@ -72,6 +72,7 @@
     <Compile Include="BassBuff\SoundEffect.cs" />
     <Compile Include="BassBuff\SoundEffectInstance.cs" />
     <Compile Include="BMSChannelManager.cs" />
+    <Compile Include="INAFile.cs" />
     <Compile Include="JAIVersion.cs" />
     <Compile Include="JAI\AABase.cs" />
     <Compile Include="JAI\AAFFile.cs" />

@@ -24,6 +24,8 @@ namespace JaiSeqX.JAI.Seq
         public int perf_value;
         public int perf_duration;
         public byte perf_type;
+        public double perf_decimal;
+
         
         public byte voice_bank;
         public byte voice_program;
@@ -36,8 +38,19 @@ namespace JaiSeqX.JAI.Seq
 
         public int track_id; 
         public int track_address;
+        public int track_stack_depth;
+
 
         public int current_address;
+
+        public int[] registers;
+
+        public string message; 
+
+        public JSequenceState()
+        {
+            registers = new int[80];
+        }
        
 
     }

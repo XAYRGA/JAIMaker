@@ -27,7 +27,9 @@ namespace JaiMaker
         KeysConverter kk; 
         public bool[] keysPressed = new bool[1024];
         string JaiFile = "";
-        
+        private Dictionary<object, int> btnMap =  new Dictionary<object, int>();
+        private Dictionary<int, Dictionary<int, string>> INAMap;
+
         public RootWindow()
         {
             InitializeComponent();
@@ -44,6 +46,13 @@ namespace JaiMaker
             this.KeyDown += OnKey;
             this.KeyUp += OnKeyUp;
             kk = new KeysConverter();
+
+            for (int i=0; i < 16; i++)
+            {
+                var btn = midiChannelData.GetControlFromPosition(3, i);
+                btnMap[btn] = i; // 0 indexed.
+                btn.Click += doInsetChannel;
+            }
         }
 
         private void OnKey(object sender, KeyEventArgs kbe)
@@ -52,7 +61,7 @@ namespace JaiMaker
             if (!keysPressed[kbe.KeyValue])
             {
                 var channel = (byte)(char)kbe.KeyValue + 32;
-                Console.WriteLine("key {0}", channel);
+                //Console.WriteLine("key {0}", channel);
                 Keyboard.startSound((byte)(channel));
                 keysPressed[kbe.KeyValue] = true;
             }
@@ -60,7 +69,7 @@ namespace JaiMaker
 
         private void OnKeyUp(object sender, KeyEventArgs kbe)
         {
-            Console.WriteLine("key up?");
+            //Console.WriteLine("key up?");
 
             var channel = (byte)(char)kbe.KeyValue + 32;
             Keyboard.stopSound((byte)(channel));
@@ -141,14 +150,38 @@ namespace JaiMaker
                 {
                     return;
                 }
-                var CurrentIBNK = IBNK[bankMap[banksList.SelectedIndex]];
+                var thisBank = bankMap[banksList.SelectedIndex];
+                var CurrentIBNK = IBNK[thisBank];
                 currentIBNK = CurrentIBNK;
+
+                Dictionary<int, string> mapOut  = null;
+                if (INAMap != null)
+                {
+                
+                    INAMap.TryGetValue(thisBank, out mapOut);
+
+                }
+
+
+
                 for (int i = 0; i < CurrentIBNK.Instruments.Length; i++)
                 {
                     if (CurrentIBNK.Instruments[i] != null)
                     {
-                     
-                        if (CurrentIBNK.Instruments[i].IsPercussion)
+
+                        string repName = null;
+
+                        if(mapOut!=null)
+                        {
+                            mapOut.TryGetValue(i, out repName);
+                        }
+
+                        if (repName!=null)
+                        {
+                            progList.Items.Add((i) + " " + repName);
+                        }
+                      
+                        else if (CurrentIBNK.Instruments[i].IsPercussion)
                         {
                             progList.Items.Add("(PRC)Program " + (i));
                         } else
@@ -177,8 +210,9 @@ namespace JaiMaker
                 {
                     var rer = i < currentSequence.Tracks.Count;
            
-                        midiChannelData.GetControlFromPosition(2, i).Enabled = rer; ;
-                        midiChannelData.GetControlFromPosition(1, i).Enabled = rer;  ;
+                        midiChannelData.GetControlFromPosition(2, i).Enabled = rer; 
+                        midiChannelData.GetControlFromPosition(1, i).Enabled = rer;
+                        midiChannelData.GetControlFromPosition(3, i).Enabled = rer; 
                         midiChannelData.GetControlFromPosition(0, i).ForeColor = rer ? Color.Green : Color.Red;
              
                 }
@@ -203,7 +237,7 @@ namespace JaiMaker
                 var text = (Label)midiChannelData.GetControlFromPosition(0, i);
                 var bank = (NumericUpDown)midiChannelData.GetControlFromPosition(1, i);
                 var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
-                var volume = (TrackBar)midiChannelData.GetControlFromPosition(3, i);
+                //var volume = (TrackBar)midiChannelData.GetControlFromPosition(3, i);
 
                 Root.programs[i] = (int)program.Value;
                 Root.instrumentBanks[i] = (int)bank.Value; 
@@ -327,6 +361,32 @@ namespace JaiMaker
         private void mainControls_Paint_2(object sender, PaintEventArgs e)
         {
 
+        }
+
+
+        private void doInsetChannel(object sender, EventArgs e)
+        {
+            var channelNum = btnMap[sender];
+           
+            ((NumericUpDown)midiChannelData.GetControlFromPosition(1, channelNum)).Value  = bankMap[banksList.SelectedIndex];
+            ((NumericUpDown)midiChannelData.GetControlFromPosition(2, channelNum)).Value = progMap[progList.SelectedIndex];
+        }
+
+        private void loadINAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                fileSelector.Title = "Open INA file";
+                fileSelector.ShowDialog();
+                var myfile = fileSelector.FileName;
+                INAMap= INAFile.parse(myfile);
+                MessageBox.Show("INA File loaded successfully.");
+              
+            }
+            catch
+            {
+                MessageBox.Show("Not a valid INA File");
+            }
         }
     }
 }

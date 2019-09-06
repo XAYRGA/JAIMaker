@@ -55,6 +55,21 @@
             this.launchJSEQ = new System.Windows.Forms.Button();
             this.exportBMS = new System.Windows.Forms.Button();
             this.midiChannelData = new System.Windows.Forms.TableLayoutPanel();
+            this.selectChnButton16 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
+            this.selectChnButton14 = new System.Windows.Forms.Button();
+            this.selectChnButton13 = new System.Windows.Forms.Button();
+            this.selectChnButton12 = new System.Windows.Forms.Button();
+            this.selectChnButton11 = new System.Windows.Forms.Button();
+            this.selectChnButton10 = new System.Windows.Forms.Button();
+            this.selectChnButton9 = new System.Windows.Forms.Button();
+            this.selectChnButton8 = new System.Windows.Forms.Button();
+            this.selectChnButton7 = new System.Windows.Forms.Button();
+            this.selectChnButton6 = new System.Windows.Forms.Button();
+            this.selectChnButton5 = new System.Windows.Forms.Button();
+            this.selectChnButton4 = new System.Windows.Forms.Button();
+            this.selectChnButton3 = new System.Windows.Forms.Button();
+            this.selectChnButton2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -103,22 +118,7 @@
             this.numericUpDown30 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown31 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown32 = new System.Windows.Forms.NumericUpDown();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
-            this.trackBar3 = new System.Windows.Forms.TrackBar();
-            this.trackBar4 = new System.Windows.Forms.TrackBar();
-            this.trackBar5 = new System.Windows.Forms.TrackBar();
-            this.trackBar6 = new System.Windows.Forms.TrackBar();
-            this.trackBar7 = new System.Windows.Forms.TrackBar();
-            this.trackBar8 = new System.Windows.Forms.TrackBar();
-            this.trackBar9 = new System.Windows.Forms.TrackBar();
-            this.trackBar10 = new System.Windows.Forms.TrackBar();
-            this.trackBar11 = new System.Windows.Forms.TrackBar();
-            this.trackBar12 = new System.Windows.Forms.TrackBar();
-            this.trackBar13 = new System.Windows.Forms.TrackBar();
-            this.trackBar14 = new System.Windows.Forms.TrackBar();
-            this.trackBar15 = new System.Windows.Forms.TrackBar();
-            this.trackBar16 = new System.Windows.Forms.TrackBar();
+            this.selectChnButton1 = new System.Windows.Forms.Button();
             this.keyOffsetLabel = new System.Windows.Forms.Label();
             this.keyOffsetBar = new System.Windows.Forms.TrackBar();
             this.velLabel = new System.Windows.Forms.Label();
@@ -128,6 +128,7 @@
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.saveSelector = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.loadINAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.mainControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown33)).BeginInit();
@@ -164,22 +165,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown30)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown31)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown32)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar9)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar10)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar13)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar14)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar15)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.keyOffsetBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.velocityBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -204,6 +189,7 @@
             this.openAAFToolStripMenuItem,
             this.openBAAToolStripMenuItem,
             this.importMIDIToolStripMenuItem,
+            this.loadINAToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -212,7 +198,7 @@
             // openAAFToolStripMenuItem
             // 
             this.openAAFToolStripMenuItem.Name = "openAAFToolStripMenuItem";
-            this.openAAFToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.openAAFToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openAAFToolStripMenuItem.Text = "Open AAF";
             this.openAAFToolStripMenuItem.Click += new System.EventHandler(this.openAAFToolStripMenuItem_Click);
             // 
@@ -222,7 +208,7 @@
             this.type1ToolStripMenuItem,
             this.type2ToolStripMenuItem});
             this.openBAAToolStripMenuItem.Name = "openBAAToolStripMenuItem";
-            this.openBAAToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.openBAAToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openBAAToolStripMenuItem.Text = "Open BAA";
             // 
             // type1ToolStripMenuItem
@@ -242,14 +228,14 @@
             // 
             this.importMIDIToolStripMenuItem.Enabled = false;
             this.importMIDIToolStripMenuItem.Name = "importMIDIToolStripMenuItem";
-            this.importMIDIToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.importMIDIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.importMIDIToolStripMenuItem.Text = "Import MIDI";
             this.importMIDIToolStripMenuItem.Click += new System.EventHandler(this.importMIDIToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // editToolStripMenuItem
@@ -373,9 +359,9 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(421, 13);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(42, 13);
+            this.label21.Size = new System.Drawing.Size(78, 13);
             this.label21.TabIndex = 16;
-            this.label21.Text = "Volume";
+            this.label21.Text = "Insert Selected";
             // 
             // label20
             // 
@@ -424,6 +410,21 @@
             this.midiChannelData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.midiChannelData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58F));
             this.midiChannelData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 76F));
+            this.midiChannelData.Controls.Add(this.selectChnButton16, 3, 15);
+            this.midiChannelData.Controls.Add(this.button15, 3, 14);
+            this.midiChannelData.Controls.Add(this.selectChnButton14, 3, 13);
+            this.midiChannelData.Controls.Add(this.selectChnButton13, 3, 12);
+            this.midiChannelData.Controls.Add(this.selectChnButton12, 3, 11);
+            this.midiChannelData.Controls.Add(this.selectChnButton11, 3, 10);
+            this.midiChannelData.Controls.Add(this.selectChnButton10, 3, 9);
+            this.midiChannelData.Controls.Add(this.selectChnButton9, 3, 8);
+            this.midiChannelData.Controls.Add(this.selectChnButton8, 3, 7);
+            this.midiChannelData.Controls.Add(this.selectChnButton7, 3, 6);
+            this.midiChannelData.Controls.Add(this.selectChnButton6, 3, 5);
+            this.midiChannelData.Controls.Add(this.selectChnButton5, 3, 4);
+            this.midiChannelData.Controls.Add(this.selectChnButton4, 3, 3);
+            this.midiChannelData.Controls.Add(this.selectChnButton3, 3, 2);
+            this.midiChannelData.Controls.Add(this.selectChnButton2, 3, 1);
             this.midiChannelData.Controls.Add(this.label3, 0, 0);
             this.midiChannelData.Controls.Add(this.label4, 0, 1);
             this.midiChannelData.Controls.Add(this.label5, 0, 2);
@@ -472,22 +473,7 @@
             this.midiChannelData.Controls.Add(this.numericUpDown30, 2, 13);
             this.midiChannelData.Controls.Add(this.numericUpDown31, 2, 14);
             this.midiChannelData.Controls.Add(this.numericUpDown32, 2, 15);
-            this.midiChannelData.Controls.Add(this.trackBar1, 3, 0);
-            this.midiChannelData.Controls.Add(this.trackBar2, 3, 1);
-            this.midiChannelData.Controls.Add(this.trackBar3, 3, 2);
-            this.midiChannelData.Controls.Add(this.trackBar4, 3, 3);
-            this.midiChannelData.Controls.Add(this.trackBar5, 3, 4);
-            this.midiChannelData.Controls.Add(this.trackBar6, 3, 5);
-            this.midiChannelData.Controls.Add(this.trackBar7, 3, 6);
-            this.midiChannelData.Controls.Add(this.trackBar8, 3, 7);
-            this.midiChannelData.Controls.Add(this.trackBar9, 3, 8);
-            this.midiChannelData.Controls.Add(this.trackBar10, 3, 9);
-            this.midiChannelData.Controls.Add(this.trackBar11, 3, 10);
-            this.midiChannelData.Controls.Add(this.trackBar12, 3, 11);
-            this.midiChannelData.Controls.Add(this.trackBar13, 3, 12);
-            this.midiChannelData.Controls.Add(this.trackBar14, 3, 13);
-            this.midiChannelData.Controls.Add(this.trackBar15, 3, 14);
-            this.midiChannelData.Controls.Add(this.trackBar16, 3, 15);
+            this.midiChannelData.Controls.Add(this.selectChnButton1, 3, 0);
             this.midiChannelData.Enabled = false;
             this.midiChannelData.Location = new System.Drawing.Point(253, 29);
             this.midiChannelData.Name = "midiChannelData";
@@ -511,6 +497,171 @@
             this.midiChannelData.Size = new System.Drawing.Size(254, 323);
             this.midiChannelData.TabIndex = 11;
             this.midiChannelData.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
+            // 
+            // selectChnButton16
+            // 
+            this.selectChnButton16.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton16.Location = new System.Drawing.Point(178, 302);
+            this.selectChnButton16.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton16.Name = "selectChnButton16";
+            this.selectChnButton16.Size = new System.Drawing.Size(75, 21);
+            this.selectChnButton16.TabIndex = 63;
+            this.selectChnButton16.Text = "Set Selected";
+            this.selectChnButton16.UseVisualStyleBackColor = true;
+            // 
+            // button15
+            // 
+            this.button15.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.button15.Location = new System.Drawing.Point(178, 282);
+            this.button15.Margin = new System.Windows.Forms.Padding(0);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(75, 20);
+            this.button15.TabIndex = 62;
+            this.button15.Text = "Set Selected";
+            this.button15.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton14
+            // 
+            this.selectChnButton14.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton14.Location = new System.Drawing.Point(178, 262);
+            this.selectChnButton14.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton14.Name = "selectChnButton14";
+            this.selectChnButton14.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton14.TabIndex = 61;
+            this.selectChnButton14.Text = "Set Selected";
+            this.selectChnButton14.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton13
+            // 
+            this.selectChnButton13.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton13.Location = new System.Drawing.Point(178, 242);
+            this.selectChnButton13.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton13.Name = "selectChnButton13";
+            this.selectChnButton13.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton13.TabIndex = 60;
+            this.selectChnButton13.Text = "Set Selected";
+            this.selectChnButton13.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton12
+            // 
+            this.selectChnButton12.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton12.Location = new System.Drawing.Point(178, 222);
+            this.selectChnButton12.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton12.Name = "selectChnButton12";
+            this.selectChnButton12.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton12.TabIndex = 59;
+            this.selectChnButton12.Text = "Set Selected";
+            this.selectChnButton12.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton11
+            // 
+            this.selectChnButton11.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton11.Location = new System.Drawing.Point(178, 202);
+            this.selectChnButton11.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton11.Name = "selectChnButton11";
+            this.selectChnButton11.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton11.TabIndex = 58;
+            this.selectChnButton11.Text = "Set Selected";
+            this.selectChnButton11.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton10
+            // 
+            this.selectChnButton10.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton10.Location = new System.Drawing.Point(178, 182);
+            this.selectChnButton10.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton10.Name = "selectChnButton10";
+            this.selectChnButton10.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton10.TabIndex = 57;
+            this.selectChnButton10.Text = "Set Selected";
+            this.selectChnButton10.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton9
+            // 
+            this.selectChnButton9.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton9.Location = new System.Drawing.Point(178, 162);
+            this.selectChnButton9.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton9.Name = "selectChnButton9";
+            this.selectChnButton9.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton9.TabIndex = 56;
+            this.selectChnButton9.Text = "Set Selected";
+            this.selectChnButton9.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton8
+            // 
+            this.selectChnButton8.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton8.Location = new System.Drawing.Point(178, 142);
+            this.selectChnButton8.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton8.Name = "selectChnButton8";
+            this.selectChnButton8.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton8.TabIndex = 55;
+            this.selectChnButton8.Text = "Set Selected";
+            this.selectChnButton8.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton7
+            // 
+            this.selectChnButton7.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton7.Location = new System.Drawing.Point(178, 122);
+            this.selectChnButton7.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton7.Name = "selectChnButton7";
+            this.selectChnButton7.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton7.TabIndex = 54;
+            this.selectChnButton7.Text = "Set Selected";
+            this.selectChnButton7.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton6
+            // 
+            this.selectChnButton6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton6.Location = new System.Drawing.Point(178, 102);
+            this.selectChnButton6.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton6.Name = "selectChnButton6";
+            this.selectChnButton6.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton6.TabIndex = 53;
+            this.selectChnButton6.Text = "Set Selected";
+            this.selectChnButton6.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton5
+            // 
+            this.selectChnButton5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton5.Location = new System.Drawing.Point(178, 82);
+            this.selectChnButton5.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton5.Name = "selectChnButton5";
+            this.selectChnButton5.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton5.TabIndex = 52;
+            this.selectChnButton5.Text = "Set Selected";
+            this.selectChnButton5.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton4
+            // 
+            this.selectChnButton4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton4.Location = new System.Drawing.Point(178, 62);
+            this.selectChnButton4.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton4.Name = "selectChnButton4";
+            this.selectChnButton4.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton4.TabIndex = 51;
+            this.selectChnButton4.Text = "Set Selected";
+            this.selectChnButton4.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton3
+            // 
+            this.selectChnButton3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton3.Location = new System.Drawing.Point(178, 42);
+            this.selectChnButton3.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton3.Name = "selectChnButton3";
+            this.selectChnButton3.Size = new System.Drawing.Size(75, 20);
+            this.selectChnButton3.TabIndex = 50;
+            this.selectChnButton3.Text = "Set Selected";
+            this.selectChnButton3.UseVisualStyleBackColor = true;
+            // 
+            // selectChnButton2
+            // 
+            this.selectChnButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton2.Location = new System.Drawing.Point(178, 21);
+            this.selectChnButton2.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton2.Name = "selectChnButton2";
+            this.selectChnButton2.Size = new System.Drawing.Size(75, 21);
+            this.selectChnButton2.TabIndex = 49;
+            this.selectChnButton2.Text = "Set Selected";
+            this.selectChnButton2.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -1040,117 +1191,16 @@
             this.numericUpDown32.Size = new System.Drawing.Size(52, 20);
             this.numericUpDown32.TabIndex = 47;
             // 
-            // trackBar1
+            // selectChnButton1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(181, 3);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(63, 15);
-            this.trackBar1.TabIndex = 48;
-            // 
-            // trackBar2
-            // 
-            this.trackBar2.Location = new System.Drawing.Point(181, 24);
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(65, 15);
-            this.trackBar2.TabIndex = 49;
-            // 
-            // trackBar3
-            // 
-            this.trackBar3.Location = new System.Drawing.Point(181, 45);
-            this.trackBar3.Name = "trackBar3";
-            this.trackBar3.Size = new System.Drawing.Size(65, 14);
-            this.trackBar3.TabIndex = 50;
-            // 
-            // trackBar4
-            // 
-            this.trackBar4.Location = new System.Drawing.Point(181, 65);
-            this.trackBar4.Name = "trackBar4";
-            this.trackBar4.Size = new System.Drawing.Size(65, 14);
-            this.trackBar4.TabIndex = 51;
-            // 
-            // trackBar5
-            // 
-            this.trackBar5.Location = new System.Drawing.Point(181, 85);
-            this.trackBar5.Name = "trackBar5";
-            this.trackBar5.Size = new System.Drawing.Size(65, 14);
-            this.trackBar5.TabIndex = 52;
-            // 
-            // trackBar6
-            // 
-            this.trackBar6.Location = new System.Drawing.Point(181, 105);
-            this.trackBar6.Name = "trackBar6";
-            this.trackBar6.Size = new System.Drawing.Size(65, 14);
-            this.trackBar6.TabIndex = 53;
-            // 
-            // trackBar7
-            // 
-            this.trackBar7.Location = new System.Drawing.Point(181, 125);
-            this.trackBar7.Name = "trackBar7";
-            this.trackBar7.Size = new System.Drawing.Size(65, 14);
-            this.trackBar7.TabIndex = 54;
-            // 
-            // trackBar8
-            // 
-            this.trackBar8.Location = new System.Drawing.Point(181, 145);
-            this.trackBar8.Name = "trackBar8";
-            this.trackBar8.Size = new System.Drawing.Size(65, 14);
-            this.trackBar8.TabIndex = 55;
-            // 
-            // trackBar9
-            // 
-            this.trackBar9.Location = new System.Drawing.Point(181, 165);
-            this.trackBar9.Name = "trackBar9";
-            this.trackBar9.Size = new System.Drawing.Size(65, 14);
-            this.trackBar9.TabIndex = 56;
-            // 
-            // trackBar10
-            // 
-            this.trackBar10.Location = new System.Drawing.Point(181, 185);
-            this.trackBar10.Name = "trackBar10";
-            this.trackBar10.Size = new System.Drawing.Size(65, 14);
-            this.trackBar10.TabIndex = 57;
-            // 
-            // trackBar11
-            // 
-            this.trackBar11.Location = new System.Drawing.Point(181, 205);
-            this.trackBar11.Name = "trackBar11";
-            this.trackBar11.Size = new System.Drawing.Size(65, 14);
-            this.trackBar11.TabIndex = 58;
-            // 
-            // trackBar12
-            // 
-            this.trackBar12.Location = new System.Drawing.Point(181, 225);
-            this.trackBar12.Name = "trackBar12";
-            this.trackBar12.Size = new System.Drawing.Size(65, 14);
-            this.trackBar12.TabIndex = 59;
-            // 
-            // trackBar13
-            // 
-            this.trackBar13.Location = new System.Drawing.Point(181, 245);
-            this.trackBar13.Name = "trackBar13";
-            this.trackBar13.Size = new System.Drawing.Size(65, 14);
-            this.trackBar13.TabIndex = 60;
-            // 
-            // trackBar14
-            // 
-            this.trackBar14.Location = new System.Drawing.Point(181, 265);
-            this.trackBar14.Name = "trackBar14";
-            this.trackBar14.Size = new System.Drawing.Size(65, 14);
-            this.trackBar14.TabIndex = 61;
-            // 
-            // trackBar15
-            // 
-            this.trackBar15.Location = new System.Drawing.Point(181, 285);
-            this.trackBar15.Name = "trackBar15";
-            this.trackBar15.Size = new System.Drawing.Size(65, 14);
-            this.trackBar15.TabIndex = 62;
-            // 
-            // trackBar16
-            // 
-            this.trackBar16.Location = new System.Drawing.Point(181, 305);
-            this.trackBar16.Name = "trackBar16";
-            this.trackBar16.Size = new System.Drawing.Size(65, 15);
-            this.trackBar16.TabIndex = 63;
+            this.selectChnButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.selectChnButton1.Location = new System.Drawing.Point(178, 0);
+            this.selectChnButton1.Margin = new System.Windows.Forms.Padding(0);
+            this.selectChnButton1.Name = "selectChnButton1";
+            this.selectChnButton1.Size = new System.Drawing.Size(75, 21);
+            this.selectChnButton1.TabIndex = 48;
+            this.selectChnButton1.Text = "Set Selected";
+            this.selectChnButton1.UseVisualStyleBackColor = true;
             // 
             // keyOffsetLabel
             // 
@@ -1222,6 +1272,13 @@
             this.pictureBox1.TabIndex = 18;
             this.pictureBox1.TabStop = false;
             // 
+            // loadINAToolStripMenuItem
+            // 
+            this.loadINAToolStripMenuItem.Name = "loadINAToolStripMenuItem";
+            this.loadINAToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadINAToolStripMenuItem.Text = "Load INA";
+            this.loadINAToolStripMenuItem.Click += new System.EventHandler(this.loadINAToolStripMenuItem_Click);
+            // 
             // RootWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1275,22 +1332,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown30)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown31)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown32)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar9)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar10)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar13)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar14)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar15)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.keyOffsetBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.velocityBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -1371,22 +1412,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown30;
         private System.Windows.Forms.NumericUpDown numericUpDown31;
         private System.Windows.Forms.NumericUpDown numericUpDown32;
-        private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.TrackBar trackBar2;
-        private System.Windows.Forms.TrackBar trackBar3;
-        private System.Windows.Forms.TrackBar trackBar4;
-        private System.Windows.Forms.TrackBar trackBar5;
-        private System.Windows.Forms.TrackBar trackBar6;
-        private System.Windows.Forms.TrackBar trackBar7;
-        private System.Windows.Forms.TrackBar trackBar8;
-        private System.Windows.Forms.TrackBar trackBar9;
-        private System.Windows.Forms.TrackBar trackBar10;
-        private System.Windows.Forms.TrackBar trackBar11;
-        private System.Windows.Forms.TrackBar trackBar12;
-        private System.Windows.Forms.TrackBar trackBar13;
-        private System.Windows.Forms.TrackBar trackBar14;
-        private System.Windows.Forms.TrackBar trackBar15;
-        private System.Windows.Forms.TrackBar trackBar16;
         private System.Windows.Forms.Button launchJSEQ;
         private System.Windows.Forms.Button exportBMS;
         private System.Windows.Forms.Label label21;
@@ -1399,6 +1424,23 @@
         private System.Windows.Forms.CheckBox kbmode;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.NumericUpDown numericUpDown33;
+        private System.Windows.Forms.Button selectChnButton16;
+        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button selectChnButton14;
+        private System.Windows.Forms.Button selectChnButton13;
+        private System.Windows.Forms.Button selectChnButton12;
+        private System.Windows.Forms.Button selectChnButton11;
+        private System.Windows.Forms.Button selectChnButton10;
+        private System.Windows.Forms.Button selectChnButton9;
+        private System.Windows.Forms.Button selectChnButton8;
+        private System.Windows.Forms.Button selectChnButton7;
+        private System.Windows.Forms.Button selectChnButton6;
+        private System.Windows.Forms.Button selectChnButton5;
+        private System.Windows.Forms.Button selectChnButton4;
+        private System.Windows.Forms.Button selectChnButton3;
+        private System.Windows.Forms.Button selectChnButton2;
+        private System.Windows.Forms.Button selectChnButton1;
+        private System.Windows.Forms.ToolStripMenuItem loadINAToolStripMenuItem;
     }
 }
 
