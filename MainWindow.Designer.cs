@@ -37,14 +37,15 @@
             this.type1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.type2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importMIDIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadINAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentStatus = new System.Windows.Forms.Label();
             this.fileSelector = new System.Windows.Forms.OpenFileDialog();
             this.banksList = new System.Windows.Forms.ListBox();
             this.progList = new System.Windows.Forms.ListBox();
             this.mainControls = new System.Windows.Forms.Panel();
+            this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             this.kbmode = new System.Windows.Forms.CheckBox();
@@ -128,7 +129,7 @@
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.saveSelector = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.loadINAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.madeByXayrToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.mainControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown33)).BeginInit();
@@ -174,7 +175,6 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.editToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -214,14 +214,14 @@
             // type1ToolStripMenuItem
             // 
             this.type1ToolStripMenuItem.Name = "type1ToolStripMenuItem";
-            this.type1ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.type1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.type1ToolStripMenuItem.Text = "Type 1";
             this.type1ToolStripMenuItem.Click += new System.EventHandler(this.type1ToolStripMenuItem_Click);
             // 
             // type2ToolStripMenuItem
             // 
             this.type2ToolStripMenuItem.Name = "type2ToolStripMenuItem";
-            this.type2ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.type2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.type2ToolStripMenuItem.Text = "Type 2";
             // 
             // importMIDIToolStripMenuItem
@@ -232,20 +232,23 @@
             this.importMIDIToolStripMenuItem.Text = "Import MIDI";
             this.importMIDIToolStripMenuItem.Click += new System.EventHandler(this.importMIDIToolStripMenuItem_Click);
             // 
+            // loadINAToolStripMenuItem
+            // 
+            this.loadINAToolStripMenuItem.Name = "loadINAToolStripMenuItem";
+            this.loadINAToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadINAToolStripMenuItem.Text = "Load INA";
+            this.loadINAToolStripMenuItem.Click += new System.EventHandler(this.loadINAToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
-            // 
             // aboutToolStripMenuItem
             // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.madeByXayrToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
@@ -284,6 +287,7 @@
             // 
             // mainControls
             // 
+            this.mainControls.Controls.Add(this.label23);
             this.mainControls.Controls.Add(this.label22);
             this.mainControls.Controls.Add(this.numericUpDown33);
             this.mainControls.Controls.Add(this.kbmode);
@@ -307,6 +311,15 @@
             this.mainControls.Size = new System.Drawing.Size(519, 623);
             this.mainControls.TabIndex = 5;
             this.mainControls.Paint += new System.Windows.Forms.PaintEventHandler(this.mainControls_Paint_2);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(145, 10);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(102, 13);
+            this.label23.TabIndex = 19;
+            this.label23.Text = "JAIMaker by Xayrga";
             // 
             // label22
             // 
@@ -1207,9 +1220,9 @@
             this.keyOffsetLabel.AutoSize = true;
             this.keyOffsetLabel.Location = new System.Drawing.Point(258, 492);
             this.keyOffsetLabel.Name = "keyOffsetLabel";
-            this.keyOffsetLabel.Size = new System.Drawing.Size(68, 13);
+            this.keyOffsetLabel.Size = new System.Drawing.Size(74, 13);
             this.keyOffsetLabel.TabIndex = 10;
-            this.keyOffsetLabel.Text = "Key Offset: 0";
+            this.keyOffsetLabel.Text = "Key Offset: 34";
             // 
             // keyOffsetBar
             // 
@@ -1219,6 +1232,7 @@
             this.keyOffsetBar.Name = "keyOffsetBar";
             this.keyOffsetBar.Size = new System.Drawing.Size(238, 45);
             this.keyOffsetBar.TabIndex = 9;
+            this.keyOffsetBar.Value = 34;
             this.keyOffsetBar.Scroll += new System.EventHandler(this.keyOffsetBar_Scroll);
             // 
             // velLabel
@@ -1226,9 +1240,9 @@
             this.velLabel.AutoSize = true;
             this.velLabel.Location = new System.Drawing.Point(254, 556);
             this.velLabel.Name = "velLabel";
-            this.velLabel.Size = new System.Drawing.Size(56, 13);
+            this.velLabel.Size = new System.Drawing.Size(68, 13);
             this.velLabel.TabIndex = 8;
-            this.velLabel.Text = "Velocity: 0";
+            this.velLabel.Text = "Velocity: 127";
             // 
             // label2
             // 
@@ -1255,6 +1269,7 @@
             this.velocityBar.Name = "velocityBar";
             this.velocityBar.Size = new System.Drawing.Size(238, 45);
             this.velocityBar.TabIndex = 5;
+            this.velocityBar.Value = 127;
             this.velocityBar.Scroll += new System.EventHandler(this.velocityBar_Scroll);
             // 
             // updateTimer
@@ -1272,12 +1287,11 @@
             this.pictureBox1.TabIndex = 18;
             this.pictureBox1.TabStop = false;
             // 
-            // loadINAToolStripMenuItem
+            // madeByXayrToolStripMenuItem
             // 
-            this.loadINAToolStripMenuItem.Name = "loadINAToolStripMenuItem";
-            this.loadINAToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.loadINAToolStripMenuItem.Text = "Load INA";
-            this.loadINAToolStripMenuItem.Click += new System.EventHandler(this.loadINAToolStripMenuItem_Click);
+            this.madeByXayrToolStripMenuItem.Name = "madeByXayrToolStripMenuItem";
+            this.madeByXayrToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.madeByXayrToolStripMenuItem.Text = "Made by Xayr!";
             // 
             // RootWindow
             // 
@@ -1350,7 +1364,6 @@
         private System.Windows.Forms.ToolStripMenuItem type2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importMIDIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Label currentStatus;
         private System.Windows.Forms.OpenFileDialog fileSelector;
@@ -1441,6 +1454,8 @@
         private System.Windows.Forms.Button selectChnButton2;
         private System.Windows.Forms.Button selectChnButton1;
         private System.Windows.Forms.ToolStripMenuItem loadINAToolStripMenuItem;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.ToolStripMenuItem madeByXayrToolStripMenuItem;
     }
 }
 

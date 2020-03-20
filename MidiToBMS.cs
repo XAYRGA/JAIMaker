@@ -16,8 +16,8 @@ namespace JaiMaker
         static int[] DeltaEnds;
         static int[] TotalTrackDeltas; 
         static int[] TrackAddresses;
-        static int[] TrackLoops; 
-
+        static int[] TrackLoops;
+        static bool at_least_one_loop;
         static MemoryStream JaiTrackFinal;
 
         public static void doToBMS(MidiSequence wtf, string filename)
@@ -87,8 +87,6 @@ namespace JaiMaker
                 var MidTrack = wtf.Tracks[TrackID];
                 TrackAddresses[TrackID] = (int)JaiWriter.BaseStream.Position; // Store track position
 
-
-
                 JaiWriter.Write((byte)0xA4);
                 JaiWriter.Write((byte)0x20);
                 JaiWriter.Write((byte)Root.instrumentBanks[TrackID]);
@@ -99,7 +97,6 @@ namespace JaiMaker
 
                 writePrint(JaiWriter, @", T" + TrackID);
 
-
                 Stack<byte> voiceStack = new Stack<byte>(8); // JAISeq has 8 voices per track. 
                 Queue<byte> notehistory = new Queue<byte>(8);
                 for (byte v = 7; v > 0; v--) // Push all of them to be ready. 
@@ -108,7 +105,6 @@ namespace JaiMaker
                     voiceStack.Push(v); // Push to stack.
                 }
                 byte[] voiceMap = new byte[1024]; // Keeps track of what MIDI notes are currently playing on what voices. 
-
 
                 for (int ev = 0; ev < MidTrack.Events.Count; ev++)
                 {
@@ -121,9 +117,11 @@ namespace JaiMaker
                     if (cevent is MidiSharp.Events.Meta.Text.CuePointTextMetaMidiEvent)
                     {
                         var mevent = (MidiSharp.Events.Meta.Text.CuePointTextMetaMidiEvent)cevent;
+                        Console.WriteLine("YEET {0} - {1} ", TrackID, mevent.Text);
                         if (mevent.Text=="JLOOP")
                         {
                             TrackLoops[TrackID] = (int)JaiWriter.BaseStream.Position;
+                            at_least_one_loop = true;
                         }
 
                     }
@@ -137,7 +135,6 @@ namespace JaiMaker
                                 voiceStack.Push(stopVoice);
                                 JaiWriter.Write((byte)(0x80 + stopVoice)); 
                             }
-
                         }
                         if (voiceStack.Count < 1) // if theres no voice available
                         {
@@ -175,6 +172,7 @@ namespace JaiMaker
                         {
                             voiceMap[mevent.Note] = 0;
                             voiceStack.Push(stopVoice);
+                            //Console.WriteLine("Stop voice {0}",stopVoice);
                             JaiWriter.Write((byte)(0x80 + stopVoice));
                         }      
                     } 
@@ -184,13 +182,26 @@ namespace JaiMaker
                 {
                       writeDelta(JaiWriter, DeltaEnds[TrackID]); // Write finishing delta to make sure all tracks end at the same point. 
                 }
+                for (int i=0; i < voiceMap.Length; i++)
+                {
+                    if (voiceMap[i] > 0)
+                    {
+                        JaiWriter.Write((byte)(0x80 + voiceMap[i])); // stop all notes before song end. 
+                        Console.WriteLine("=== STOP VOICE END SONG {0}", voiceMap[i]);
+                    }
+                }
                 if (TrackLoops[TrackID] > 0)
                 {
                       JaiWriter.Write((byte)JaiSeqEvent.JUMP_COND); // Jump to position if 
                       JaiWriter.Write((byte)0); // (always)
                       writeInt24BE(JaiWriter, TrackLoops[TrackID]); // int24 position.
+                  
                 }
                 JaiWriter.Write((byte)JaiSeqEvent.FIN);
+                while (JaiWriter.BaseStream.Position % 32 > 0)
+                {
+                    JaiWriter.Write((byte)0);
+                }
             }
             // Done with parsing tracks. 
             JaiWriter.BaseStream.Position = rootTrack_OpenTrackPos; // We have to update the track opening points that we had before. 
@@ -200,6 +211,7 @@ namespace JaiMaker
                 JaiWriter.Write((byte)i); // Index 
                 writeInt24BE(JaiWriter, TrackAddresses[i]); 
             }
+
             JaiWriter.Flush();
             File.WriteAllBytes(filename, ReadToEnd(JaiTrackFinal));
 

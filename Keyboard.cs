@@ -59,6 +59,7 @@ namespace JaiMaker
                             var wsys = Root.allWSYS[wsysid];
                             if (wsys != null)
                             {
+                                
                                 var wave = wsys.waves[waveid];
                                 var sound = channelManager.loadSound(wave.pcmpath, wave.loop, wave.loop_start, wave.loop_end).CreateInstance();
                                 var pmul = prog.Pitch * key.Pitch;
