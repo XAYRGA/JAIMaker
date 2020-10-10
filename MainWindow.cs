@@ -321,9 +321,12 @@ namespace JaiMaker
                 var myfile = fileSelector.FileName;
                 var b = File.OpenRead(myfile);
                 currentSequence = MidiSequence.Open(b);
-            } catch 
+
+            } catch (Exception E)
             {
+                Console.WriteLine("heck\n{0}", E.ToString());
                 MessageBox.Show("Not a valid midi file.");
+                
             }
             
         }

@@ -51,14 +51,9 @@ namespace JaiMaker
 
             JaiWriter.Write((byte)JaiSeqEvent.WAIT_8); // Wait 
             JaiWriter.Write((byte)2); // for 0xFFFA ticks
-            writePrint(JaiWriter, @" || DONE. \n"); 
+            writePrint(JaiWriter, @" || DONE. \n");
 
-            var rootTrack_JumpPos = JaiWriter.BaseStream.Position; // Store the position where we want to jump back to 
-            JaiWriter.Write((byte)JaiSeqEvent.WAIT_16); // Wait 
-            JaiWriter.Write((ushort)0xFFFA); // for 0xFFFA ticks
-            JaiWriter.Write((byte)JaiSeqEvent.JUMP_COND); // Jump to position if 
-            JaiWriter.Write((byte)0); // (always)
-            writeInt24BE(JaiWriter, (int)rootTrack_JumpPos); // int24 position.
+
 
             for (int tridx = 0; tridx < wtf.Tracks.Count; tridx++)
             {
@@ -68,6 +63,15 @@ namespace JaiMaker
                 {
                     var CEvent = CTrk.Events[evntid]; // Current event object
                     total_trk_delta += (int)CEvent.DeltaTime; // Add the event to the total delta for our track 
+                    if (CTrk.Events[evntid] is MidiSharp.Events.Meta.Text.CuePointTextMetaMidiEvent)
+                    {
+                        var mevent = (MidiSharp.Events.Meta.Text.CuePointTextMetaMidiEvent)CTrk.Events[evntid];
+                       
+                        if (mevent.Text == "JLOOP")
+                        {
+                            at_least_one_loop = true; // check for loop -- hack
+                        }
+                    }
                 }
                 TotalTrackDeltas[tridx] = total_trk_delta; // Once we've iterated through all events we store the total track delta. 
                 if (total_trk_delta > largest_delta) // We want to know what our highest delta is so we can make all the tracks end at the same time. 
@@ -79,6 +83,17 @@ namespace JaiMaker
             {
                 DeltaEnds[trk] = largest_delta - TotalTrackDeltas[trk]; // Now we know when all the tracks will end at the same time, so we want to sandwhich that onto the end of the track. 
             }
+
+            var rootTrack_JumpPos = JaiWriter.BaseStream.Position; // Store the position where we want to jump back to 
+            writeDelta(JaiWriter,largest_delta);
+           
+            if (at_least_one_loop)
+            {
+                JaiWriter.Write((byte)JaiSeqEvent.JUMP_COND); // Jump to position if 
+                JaiWriter.Write((byte)0); // (always)
+                writeInt24BE(JaiWriter, (int)rootTrack_JumpPos); // int24 position.
+            }
+
             JaiWriter.Write((byte)JaiSeqEvent.FIN); // Write the finisher for the track, not because it's required but just becase it's standard. 
 
 

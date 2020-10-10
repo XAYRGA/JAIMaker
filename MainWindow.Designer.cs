@@ -40,6 +40,7 @@
             this.loadINAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.madeByXayrToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentStatus = new System.Windows.Forms.Label();
             this.fileSelector = new System.Windows.Forms.OpenFileDialog();
             this.banksList = new System.Windows.Forms.ListBox();
@@ -129,7 +130,6 @@
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.saveSelector = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.madeByXayrToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.mainControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown33)).BeginInit();
@@ -198,7 +198,7 @@
             // openAAFToolStripMenuItem
             // 
             this.openAAFToolStripMenuItem.Name = "openAAFToolStripMenuItem";
-            this.openAAFToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openAAFToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.openAAFToolStripMenuItem.Text = "Open AAF";
             this.openAAFToolStripMenuItem.Click += new System.EventHandler(this.openAAFToolStripMenuItem_Click);
             // 
@@ -208,41 +208,41 @@
             this.type1ToolStripMenuItem,
             this.type2ToolStripMenuItem});
             this.openBAAToolStripMenuItem.Name = "openBAAToolStripMenuItem";
-            this.openBAAToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openBAAToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.openBAAToolStripMenuItem.Text = "Open BAA";
             // 
             // type1ToolStripMenuItem
             // 
             this.type1ToolStripMenuItem.Name = "type1ToolStripMenuItem";
-            this.type1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.type1ToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.type1ToolStripMenuItem.Text = "Type 1";
             this.type1ToolStripMenuItem.Click += new System.EventHandler(this.type1ToolStripMenuItem_Click);
             // 
             // type2ToolStripMenuItem
             // 
             this.type2ToolStripMenuItem.Name = "type2ToolStripMenuItem";
-            this.type2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.type2ToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.type2ToolStripMenuItem.Text = "Type 2";
             // 
             // importMIDIToolStripMenuItem
             // 
             this.importMIDIToolStripMenuItem.Enabled = false;
             this.importMIDIToolStripMenuItem.Name = "importMIDIToolStripMenuItem";
-            this.importMIDIToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importMIDIToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.importMIDIToolStripMenuItem.Text = "Import MIDI";
             this.importMIDIToolStripMenuItem.Click += new System.EventHandler(this.importMIDIToolStripMenuItem_Click);
             // 
             // loadINAToolStripMenuItem
             // 
             this.loadINAToolStripMenuItem.Name = "loadINAToolStripMenuItem";
-            this.loadINAToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadINAToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.loadINAToolStripMenuItem.Text = "Load INA";
             this.loadINAToolStripMenuItem.Click += new System.EventHandler(this.loadINAToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // aboutToolStripMenuItem
@@ -252,6 +252,12 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // madeByXayrToolStripMenuItem
+            // 
+            this.madeByXayrToolStripMenuItem.Name = "madeByXayrToolStripMenuItem";
+            this.madeByXayrToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.madeByXayrToolStripMenuItem.Text = "Made by Xayr!";
             // 
             // currentStatus
             // 
@@ -1286,12 +1292,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 18;
             this.pictureBox1.TabStop = false;
-            // 
-            // madeByXayrToolStripMenuItem
-            // 
-            this.madeByXayrToolStripMenuItem.Name = "madeByXayrToolStripMenuItem";
-            this.madeByXayrToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.madeByXayrToolStripMenuItem.Text = "Made by Xayr!";
             // 
             // RootWindow
             // 
