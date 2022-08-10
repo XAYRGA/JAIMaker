@@ -8,11 +8,12 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>JaiMaker</RootNamespace>
     <AssemblyName>JaiMaker</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -68,11 +69,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutCreatorWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutCreatorWindow.designer.cs">
+      <DependentUpon>AboutCreatorWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Assembler\JV1GenericBMSAssembler.cs" />
+    <Compile Include="Assembler\JV1Pikmin2BMSAssembler.cs" />
+    <Compile Include="Assembler\JV2GenericBMSAssembler.cs" />
+    <Compile Include="Assembler\JV2SuperMarioGalaxyAssembler.cs" />
+    <Compile Include="Assembler\SequenceAssembler.cs" />
     <Compile Include="BassBuff\Engine.CS" />
     <Compile Include="BassBuff\SoundEffect.cs" />
     <Compile Include="BassBuff\SoundEffectInstance.cs" />
     <Compile Include="BMSChannelManager.cs" />
+    <Compile Include="dlgEnterMidiProgram.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgEnterMidiProgram.Designer.cs">
+      <DependentUpon>dlgEnterMidiProgram.cs</DependentUpon>
+    </Compile>
     <Compile Include="INAFile.cs" />
+    <Compile Include="JAIMakerSoundInfo.cs" />
     <Compile Include="JAIVersion.cs" />
     <Compile Include="JAI\AABase.cs" />
     <Compile Include="JAI\AAFFile.cs" />
@@ -93,10 +112,23 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MidiToBMS.cs" />
+    <Compile Include="MidiToBMSWrapper.cs" />
+    <Compile Include="RemapInstrumentWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RemapInstrumentWindow.Designer.cs">
+      <DependentUpon>RemapInstrumentWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Root.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="util.cs" />
     <Compile Include="Visualizer.cs" />
+    <EmbeddedResource Include="AboutCreatorWindow.resx">
+      <DependentUpon>AboutCreatorWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dlgEnterMidiProgram.resx">
+      <DependentUpon>dlgEnterMidiProgram.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -110,6 +142,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="RemapInstrumentWindow.resx">
+      <DependentUpon>RemapInstrumentWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RemapInstrumentWindow.yo-NG.resx">
+      <DependentUpon>RemapInstrumentWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -121,6 +159,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\coollogo_com-29453469.png" />
+    <None Include="Resources\xbadgetrns_sml.png" />
     <Content Include="tahoma.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

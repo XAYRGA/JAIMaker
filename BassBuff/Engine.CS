@@ -27,13 +27,11 @@ namespace JaiSeqX.Player.BassBuff
                 0xE8,0x82,0xE3,0xE9,0xE8,0xE9,0xEB,0xE8,0xEE,0xE9,0xE9,
             };
             for (int i=0; i < eml.Length;i++)
-            {
                 eml[i] ^=(obfu);
-            }
+
             for (int i = 0; i < rkey.Length; i++)
-            {
                 rkey[i] ^= (obfu);
-            }
+            
             #endregion
 
             Un4seen.Bass.BassNet.Registration(Encoding.ASCII.GetString(eml), Encoding.ASCII.GetString(rkey)); // Registration code, feel free to email me.  
@@ -47,9 +45,7 @@ namespace JaiSeqX.Player.BassBuff
 
             BASS_DEVICEINFO info = new BASS_DEVICEINFO(); // Print device info. 
             for (int n = 0; Bass.BASS_GetDeviceInfo(n, info); n++)
-            {
                 Console.WriteLine(info.ToString());
-            }
         }
 
  

@@ -13,6 +13,7 @@ using JaiSeqX.JAI;
 using MidiSharp;
 using System.IO;
 using System.Diagnostics;
+using JaiMaker.Assembler;
 
 namespace JaiMaker
 {
@@ -20,6 +21,7 @@ namespace JaiMaker
     {
         public int[] bankMap = new int[1024];
         public int[] progMap = new int[1024];
+        public Dictionary<int, JAIMakerSoundInfo> RemapInfo = new Dictionary<int, JAIMakerSoundInfo>();
         InstrumentBank currentIBNK;
         Instrument currentInst;
         MidiSequence currentSequence;
@@ -53,6 +55,7 @@ namespace JaiMaker
                 btnMap[btn] = i; // 0 indexed.
                 btn.Click += doInsetChannel;
             }
+            bmsFlavor.SelectedIndex = 0;
         }
 
         private void OnKey(object sender, KeyEventArgs kbe)
@@ -80,6 +83,7 @@ namespace JaiMaker
         {
             mainControls.Enabled = true;
             importMIDIToolStripMenuItem.Enabled = true;
+
 
             UpdateBanks();
 
@@ -153,48 +157,35 @@ namespace JaiMaker
                 var thisBank = bankMap[banksList.SelectedIndex];
                 var CurrentIBNK = IBNK[thisBank];
                 currentIBNK = CurrentIBNK;
-
+                Root.BankNumber = currentIBNK.id;
                 Dictionary<int, string> mapOut  = null;
                 if (INAMap != null)
-                {
-                
                     INAMap.TryGetValue(thisBank, out mapOut);
 
-                }
 
 
 
                 for (int i = 0; i < CurrentIBNK.Instruments.Length; i++)
-                {
                     if (CurrentIBNK.Instruments[i] != null)
                     {
 
                         string repName = null;
 
                         if(mapOut!=null)
-                        {
                             mapOut.TryGetValue(i, out repName);
-                        }
+
 
                         if (repName!=null)
-                        {
-                            progList.Items.Add((i) + " " + repName);
-                        }
-                      
+                            progList.Items.Add((i) + " " + repName);                      
                         else if (CurrentIBNK.Instruments[i].IsPercussion)
-                        {
                             progList.Items.Add("(PRC)Program " + (i));
-                        } else
-                        {
+                        else
                             progList.Items.Add("Program " + (i));
-                        }
-
-
+  
                         progMap[progidx] = i;
                         progidx++;
 
                     }
-                }
                 Root.currentBank = currentIBNK;
             }
             catch { } // Fuck this too. 
@@ -218,9 +209,10 @@ namespace JaiMaker
                 }
                 exportBMS.Enabled = true;
                 if (File.Exists("JaiSeqX.exe"))
-                {
                     launchJSEQ.Enabled = true;
-                }
+                remapManage.Enabled = true;
+                bmsFlavor.Enabled = true;
+
             } else
             {
                 launchJSEQ.Enabled = false;
@@ -249,11 +241,12 @@ namespace JaiMaker
         {
             try
             {
-                if (currentIBNK == null) { return; }
-                if (progList.SelectedIndex > currentIBNK.Instruments.Length || progList.SelectedIndex > progMap.Length)
-                {
+                if (currentIBNK == null)
                     return;
-                }
+                       
+                if (progList.SelectedIndex > currentIBNK.Instruments.Length || progList.SelectedIndex > progMap.Length)
+                    return;
+
 
                 currentInst = currentIBNK.Instruments[progMap[progList.SelectedIndex]];
                 Root.currentProg = currentInst;
@@ -294,8 +287,9 @@ namespace JaiMaker
 
         private void launchJSEQ_Click(object sender, EventArgs e)
         {
-            MidiToBMS.doToBMS(currentSequence, "test.bms");
+            //MidiToBMS.doToBMS(currentSequence, "test.bms");
 
+            exportBMSFile(currentSequence, "test.bms");
             var args = string.Format("visu \"{0}\" {1} test.bms",JaiFile,(int)type);
             var b = new ProcessStartInfo("JaiSeqX.exe", args);
             var bw = Process.Start(b);
@@ -304,11 +298,34 @@ namespace JaiMaker
 
         }
 
+        private void exportBMSFile(MidiSequence seq, string filename)
+        {
+            ISequenceAssembler assembler; 
+            switch (bmsFlavor.SelectedIndex)
+            {
+                case 0:
+                    assembler = new JV1GenericBMSAssembler();
+                    break;
+
+                default:
+                    assembler = new JV1GenericBMSAssembler();
+                    break;
+            }
+            var Converter = new MidiToBMSAssembler(seq, assembler);
+            var qc = File.OpenWrite(filename);
+            Converter.output = new Be.IO.BeBinaryWriter(qc);
+            assembler.output = Converter.output;
+            Converter.processSequence();
+            qc.Flush();
+            qc.Close();
+
+        }
         private void exportBMS_Click(object sender, EventArgs e)
         {
             saveSelector.ShowDialog();
             var name = saveSelector.FileName;
-            MidiToBMS.doToBMS(currentSequence, name);
+            exportBMSFile(currentSequence, name);
+            //MidiToBMS.doToBMS(currentSequence, name);
            
         }
 
@@ -356,11 +373,6 @@ namespace JaiMaker
             }
         }
 
-        private void numericUpDown33_ValueChanged(object sender, EventArgs e)
-        {
-            Root.Tempo = (int)numericUpDown33.Value;
-        }
-
         private void mainControls_Paint_2(object sender, PaintEventArgs e)
         {
 
@@ -390,6 +402,28 @@ namespace JaiMaker
             {
                 MessageBox.Show("Not a valid INA File");
             }
+        }
+
+        private void madeByXayrToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+       
+        }
+
+        private void bmsFlavor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void remapManage_Click(object sender, EventArgs e)
+        {
+            var dlg = new RemapInstrumentWindow();
+            dlg.RemapData = RemapInfo;
+            dlg.Show();
+        }
+
+        private void madeByXayrToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            new AboutCreatorWindow().ShowDialog();
         }
     }
 }

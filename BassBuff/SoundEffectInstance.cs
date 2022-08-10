@@ -31,15 +31,10 @@ namespace JaiSeqX.Player.BassBuff
             var sz = Bass.BASS_ChannelGetLength(handle);
             
             if (loopend > sz | (loopend - loopstart) < 3000) // Hax until i figure out wtf is going on with looping. 
-            {
                loopend = (int)sz;
-             
-            }
-            //Console.WriteLine("{0} {1}", loopstart, loopend);
+
             if (loop) // If we loop
-            {
                 syncHandle = Bass.BASS_ChannelSetSync(handle, BASSSync.BASS_SYNC_POS | BASSSync.BASS_SYNC_MIXTIME, loopend, Engine.globalLoopProc, new IntPtr(loopstart));// Set the global loop proc to take place at the loop end position, then return to the start.
-            }
             looping = loop; // Loopyes
         }
 
@@ -102,7 +97,6 @@ namespace JaiSeqX.Player.BassBuff
             if (!fading)
             {
                 Stop(); // If it's being collected, stop it first.
-              
                 Bass.BASS_StreamFree(handle); // Then finally, we can free the stream, as the sound is no longer used in any way. 
             }
             // Let the GC do its thing, i guess. 

@@ -41,16 +41,18 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.madeByXayrToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mIDIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadPresetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.savePresetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentStatus = new System.Windows.Forms.Label();
             this.fileSelector = new System.Windows.Forms.OpenFileDialog();
             this.banksList = new System.Windows.Forms.ListBox();
             this.progList = new System.Windows.Forms.ListBox();
             this.mainControls = new System.Windows.Forms.Panel();
+            this.remapManage = new System.Windows.Forms.Button();
+            this.bmsFlavor = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.numericUpDown33 = new System.Windows.Forms.NumericUpDown();
             this.kbmode = new System.Windows.Forms.CheckBox();
-            this.MidiWarningLabel = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -132,7 +134,6 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.mainControls.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown33)).BeginInit();
             this.midiChannelData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -175,7 +176,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.mIDIToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(543, 24);
@@ -256,13 +258,35 @@
             // madeByXayrToolStripMenuItem
             // 
             this.madeByXayrToolStripMenuItem.Name = "madeByXayrToolStripMenuItem";
-            this.madeByXayrToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
-            this.madeByXayrToolStripMenuItem.Text = "Made by Xayr!";
+            this.madeByXayrToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.madeByXayrToolStripMenuItem.Text = "JAIMaker";
+            this.madeByXayrToolStripMenuItem.Click += new System.EventHandler(this.madeByXayrToolStripMenuItem_Click_1);
+            // 
+            // mIDIToolStripMenuItem
+            // 
+            this.mIDIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadPresetToolStripMenuItem,
+            this.savePresetToolStripMenuItem});
+            this.mIDIToolStripMenuItem.Name = "mIDIToolStripMenuItem";
+            this.mIDIToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.mIDIToolStripMenuItem.Text = "MIDI";
+            // 
+            // loadPresetToolStripMenuItem
+            // 
+            this.loadPresetToolStripMenuItem.Name = "loadPresetToolStripMenuItem";
+            this.loadPresetToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.loadPresetToolStripMenuItem.Text = "Load preset";
+            // 
+            // savePresetToolStripMenuItem
+            // 
+            this.savePresetToolStripMenuItem.Name = "savePresetToolStripMenuItem";
+            this.savePresetToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.savePresetToolStripMenuItem.Text = "Save Preset";
             // 
             // currentStatus
             // 
             this.currentStatus.AutoSize = true;
-            this.currentStatus.Location = new System.Drawing.Point(9, 653);
+            this.currentStatus.Location = new System.Drawing.Point(9, 687);
             this.currentStatus.Name = "currentStatus";
             this.currentStatus.Size = new System.Drawing.Size(46, 13);
             this.currentStatus.TabIndex = 2;
@@ -278,26 +302,25 @@
             this.banksList.FormattingEnabled = true;
             this.banksList.Location = new System.Drawing.Point(3, 29);
             this.banksList.Name = "banksList";
-            this.banksList.Size = new System.Drawing.Size(244, 238);
+            this.banksList.Size = new System.Drawing.Size(244, 290);
             this.banksList.TabIndex = 3;
             this.banksList.SelectedIndexChanged += new System.EventHandler(this.banksList_SelectedIndexChanged);
             // 
             // progList
             // 
             this.progList.FormattingEnabled = true;
-            this.progList.Location = new System.Drawing.Point(4, 301);
+            this.progList.Location = new System.Drawing.Point(3, 351);
             this.progList.Name = "progList";
-            this.progList.Size = new System.Drawing.Size(244, 316);
+            this.progList.Size = new System.Drawing.Size(244, 303);
             this.progList.TabIndex = 4;
             this.progList.SelectedIndexChanged += new System.EventHandler(this.progList_SelectedIndexChanged);
             // 
             // mainControls
             // 
+            this.mainControls.Controls.Add(this.remapManage);
+            this.mainControls.Controls.Add(this.bmsFlavor);
             this.mainControls.Controls.Add(this.label23);
-            this.mainControls.Controls.Add(this.label22);
-            this.mainControls.Controls.Add(this.numericUpDown33);
             this.mainControls.Controls.Add(this.kbmode);
-            this.mainControls.Controls.Add(this.MidiWarningLabel);
             this.mainControls.Controls.Add(this.label21);
             this.mainControls.Controls.Add(this.label20);
             this.mainControls.Controls.Add(this.label19);
@@ -314,64 +337,56 @@
             this.mainControls.Controls.Add(this.progList);
             this.mainControls.Location = new System.Drawing.Point(12, 27);
             this.mainControls.Name = "mainControls";
-            this.mainControls.Size = new System.Drawing.Size(519, 623);
+            this.mainControls.Size = new System.Drawing.Size(519, 657);
             this.mainControls.TabIndex = 5;
             this.mainControls.Paint += new System.Windows.Forms.PaintEventHandler(this.mainControls_Paint_2);
+            // 
+            // remapManage
+            // 
+            this.remapManage.Enabled = false;
+            this.remapManage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.remapManage.Location = new System.Drawing.Point(253, 355);
+            this.remapManage.Name = "remapManage";
+            this.remapManage.Size = new System.Drawing.Size(254, 23);
+            this.remapManage.TabIndex = 24;
+            this.remapManage.Text = "Edit MIDI Program Remapping";
+            this.remapManage.UseVisualStyleBackColor = true;
+            this.remapManage.Click += new System.EventHandler(this.remapManage_Click);
+            // 
+            // bmsFlavor
+            // 
+            this.bmsFlavor.Enabled = false;
+            this.bmsFlavor.FormattingEnabled = true;
+            this.bmsFlavor.Items.AddRange(new object[] {
+            "GENERIC_V1 (SMS, LM, WW, PIK1) ",
+            "GENERIC_V2 (DKJB, TP, FSA, DD) ",
+            "PIKMIN 2 ",
+            "GALAXY 1",
+            "GALAXY 2"});
+            this.bmsFlavor.Location = new System.Drawing.Point(253, 447);
+            this.bmsFlavor.Name = "bmsFlavor";
+            this.bmsFlavor.Size = new System.Drawing.Size(253, 21);
+            this.bmsFlavor.TabIndex = 22;
+            this.bmsFlavor.SelectedIndexChanged += new System.EventHandler(this.bmsFlavor_SelectedIndexChanged);
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(145, 10);
+            this.label23.Location = new System.Drawing.Point(250, 431);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(102, 13);
-            this.label23.TabIndex = 19;
-            this.label23.Text = "JAIMaker by Xayrga";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(254, 395);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(40, 13);
-            this.label22.TabIndex = 20;
-            this.label22.Text = "Tempo";
-            // 
-            // numericUpDown33
-            // 
-            this.numericUpDown33.Location = new System.Drawing.Point(255, 411);
-            this.numericUpDown33.Maximum = new decimal(new int[] {
-            2048,
-            0,
-            0,
-            0});
-            this.numericUpDown33.Name = "numericUpDown33";
-            this.numericUpDown33.Size = new System.Drawing.Size(230, 20);
-            this.numericUpDown33.TabIndex = 19;
-            this.numericUpDown33.Value = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.numericUpDown33.ValueChanged += new System.EventHandler(this.numericUpDown33_ValueChanged);
+            this.label23.Size = new System.Drawing.Size(62, 13);
+            this.label23.TabIndex = 21;
+            this.label23.Text = "BMS Flavor";
             // 
             // kbmode
             // 
             this.kbmode.AutoSize = true;
-            this.kbmode.Location = new System.Drawing.Point(254, 375);
+            this.kbmode.Location = new System.Drawing.Point(256, 384);
             this.kbmode.Name = "kbmode";
             this.kbmode.Size = new System.Drawing.Size(101, 17);
             this.kbmode.TabIndex = 18;
             this.kbmode.Text = "Keyboard Mode";
             this.kbmode.UseVisualStyleBackColor = true;
-            // 
-            // MidiWarningLabel
-            // 
-            this.MidiWarningLabel.AutoSize = true;
-            this.MidiWarningLabel.Location = new System.Drawing.Point(254, 359);
-            this.MidiWarningLabel.Name = "MidiWarningLabel";
-            this.MidiWarningLabel.Size = new System.Drawing.Size(130, 13);
-            this.MidiWarningLabel.TabIndex = 17;
-            this.MidiWarningLabel.Text = "Import a midi to use these!";
             // 
             // label21
             // 
@@ -403,9 +418,9 @@
             // launchJSEQ
             // 
             this.launchJSEQ.Enabled = false;
-            this.launchJSEQ.Location = new System.Drawing.Point(253, 466);
+            this.launchJSEQ.Location = new System.Drawing.Point(253, 503);
             this.launchJSEQ.Name = "launchJSEQ";
-            this.launchJSEQ.Size = new System.Drawing.Size(232, 23);
+            this.launchJSEQ.Size = new System.Drawing.Size(254, 23);
             this.launchJSEQ.TabIndex = 13;
             this.launchJSEQ.Text = "Launch in JaiSeqX";
             this.launchJSEQ.UseVisualStyleBackColor = true;
@@ -414,9 +429,9 @@
             // exportBMS
             // 
             this.exportBMS.Enabled = false;
-            this.exportBMS.Location = new System.Drawing.Point(253, 437);
+            this.exportBMS.Location = new System.Drawing.Point(253, 474);
             this.exportBMS.Name = "exportBMS";
-            this.exportBMS.Size = new System.Drawing.Size(232, 23);
+            this.exportBMS.Size = new System.Drawing.Size(254, 23);
             this.exportBMS.TabIndex = 12;
             this.exportBMS.Text = "Export BMS";
             this.exportBMS.UseVisualStyleBackColor = true;
@@ -1224,7 +1239,7 @@
             // keyOffsetLabel
             // 
             this.keyOffsetLabel.AutoSize = true;
-            this.keyOffsetLabel.Location = new System.Drawing.Point(258, 492);
+            this.keyOffsetLabel.Location = new System.Drawing.Point(253, 529);
             this.keyOffsetLabel.Name = "keyOffsetLabel";
             this.keyOffsetLabel.Size = new System.Drawing.Size(74, 13);
             this.keyOffsetLabel.TabIndex = 10;
@@ -1233,10 +1248,10 @@
             // keyOffsetBar
             // 
             this.keyOffsetBar.LargeChange = 1;
-            this.keyOffsetBar.Location = new System.Drawing.Point(254, 508);
+            this.keyOffsetBar.Location = new System.Drawing.Point(253, 545);
             this.keyOffsetBar.Maximum = 100;
             this.keyOffsetBar.Name = "keyOffsetBar";
-            this.keyOffsetBar.Size = new System.Drawing.Size(238, 45);
+            this.keyOffsetBar.Size = new System.Drawing.Size(254, 45);
             this.keyOffsetBar.TabIndex = 9;
             this.keyOffsetBar.Value = 34;
             this.keyOffsetBar.Scroll += new System.EventHandler(this.keyOffsetBar_Scroll);
@@ -1244,7 +1259,7 @@
             // velLabel
             // 
             this.velLabel.AutoSize = true;
-            this.velLabel.Location = new System.Drawing.Point(254, 556);
+            this.velLabel.Location = new System.Drawing.Point(253, 593);
             this.velLabel.Name = "velLabel";
             this.velLabel.Size = new System.Drawing.Size(68, 13);
             this.velLabel.TabIndex = 8;
@@ -1253,7 +1268,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 282);
+            this.label2.Location = new System.Drawing.Point(3, 331);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 13);
             this.label2.TabIndex = 7;
@@ -1270,10 +1285,10 @@
             // 
             // velocityBar
             // 
-            this.velocityBar.Location = new System.Drawing.Point(254, 572);
+            this.velocityBar.Location = new System.Drawing.Point(253, 609);
             this.velocityBar.Maximum = 127;
             this.velocityBar.Name = "velocityBar";
-            this.velocityBar.Size = new System.Drawing.Size(238, 45);
+            this.velocityBar.Size = new System.Drawing.Size(253, 45);
             this.velocityBar.TabIndex = 5;
             this.velocityBar.Value = 127;
             this.velocityBar.Scroll += new System.EventHandler(this.velocityBar_Scroll);
@@ -1297,7 +1312,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(543, 675);
+            this.ClientSize = new System.Drawing.Size(543, 709);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.mainControls);
             this.Controls.Add(this.currentStatus);
@@ -1311,7 +1326,6 @@
             this.menuStrip1.PerformLayout();
             this.mainControls.ResumeLayout(false);
             this.mainControls.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown33)).EndInit();
             this.midiChannelData.ResumeLayout(false);
             this.midiChannelData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -1430,13 +1444,10 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label MidiWarningLabel;
         private System.Windows.Forms.Timer updateTimer;
         private System.Windows.Forms.SaveFileDialog saveSelector;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.CheckBox kbmode;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.NumericUpDown numericUpDown33;
         private System.Windows.Forms.Button selectChnButton16;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Button selectChnButton14;
@@ -1454,8 +1465,13 @@
         private System.Windows.Forms.Button selectChnButton2;
         private System.Windows.Forms.Button selectChnButton1;
         private System.Windows.Forms.ToolStripMenuItem loadINAToolStripMenuItem;
-        private System.Windows.Forms.Label label23;
         private System.Windows.Forms.ToolStripMenuItem madeByXayrToolStripMenuItem;
+        private System.Windows.Forms.ComboBox bmsFlavor;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.ToolStripMenuItem mIDIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadPresetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem savePresetToolStripMenuItem;
+        private System.Windows.Forms.Button remapManage;
     }
 }
 
