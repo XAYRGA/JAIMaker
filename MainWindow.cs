@@ -7,9 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using JaiSeqX.JAI.Seq;
-using JaiSeqX.JAI.Types;
-using JaiSeqX.JAI;
 using MidiSharp;
 using System.IO;
 using System.Diagnostics;
@@ -370,7 +367,6 @@ namespace JaiMaker
         private void doInsetChannel(object sender, EventArgs e)
         {
             var channelNum = btnMap[sender];
-           
             ((NumericUpDown)midiChannelData.GetControlFromPosition(1, channelNum)).Value  = bankMap[banksList.SelectedIndex];
             ((NumericUpDown)midiChannelData.GetControlFromPosition(2, channelNum)).Value = progMap[progList.SelectedIndex];
         }
