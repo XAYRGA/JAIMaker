@@ -60,8 +60,9 @@ namespace JaiMaker
 
         private void remapList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (remapList.SelectedIndex < ListBoxMap.Length)
+            if (remapList.SelectedIndex < ListBoxMap.Length &  remapList.SelectedIndex >= 0)
             {
+               
                 var DictionaryLookup = ListBoxMap[remapList.SelectedIndex];
                 if (RemapData.ContainsKey(DictionaryLookup))
                 {
@@ -116,6 +117,8 @@ namespace JaiMaker
 
         private void btnSetSelected_Click(object sender, EventArgs e)
         {
+            if (CurrentRemap == null)
+                return;
             CurrentRemap.bank = Root.BankNumber; // I apologize for my crimes. 
             CurrentRemap.prog = Root.ProgNumber;
             nsBank.Value = CurrentRemap.bank;

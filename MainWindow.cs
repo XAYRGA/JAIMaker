@@ -44,6 +44,9 @@ namespace JaiMaker
 
         private void RootWindow_Load(object sender, EventArgs e)
         {
+#if DEBUG
+            MessageBox.Show("JAIMaker build in DEBUG configuration!\r\n\r\nDO NOT PUSH TO RELEASE", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+#endif
             this.KeyPreview = true;
             this.KeyDown += OnKey;
             this.KeyUp += OnKeyUp;
@@ -112,8 +115,8 @@ namespace JaiMaker
             currentStatus.Text = "Opening AAF";
             var dlgr = fileSelector.ShowDialog();
            
-            try
-            {
+           // try
+           // {
             
                 var wtf = new AAFFile();
                 wtf.LoadAAFile(fileSelector.FileName,JaiSeqX.JAIVersion.ONE);
@@ -125,10 +128,14 @@ namespace JaiMaker
                 type = JaiSeqX.JAIVersion.ONE;
                 
 
-            } catch (Exception E)
-            {
+           // } catch (Exception E)
+            //{
+#if RELEASE
                 MessageBox.Show("Failed opening AAF\n" + E.ToString(), "ugh");
-            }
+#else
+                //throw E;
+#endif
+            //}
         }
 
 
@@ -199,7 +206,7 @@ namespace JaiMaker
 
                 for (int i=0; i < 16; i++)
                 {
-                    var rer = i < currentSequence.Tracks.Count;
+                    var rer = i < currentSequence.Tracks.Count - 1;
            
                         midiChannelData.GetControlFromPosition(2, i).Enabled = rer; 
                         midiChannelData.GetControlFromPosition(1, i).Enabled = rer;
@@ -234,6 +241,21 @@ namespace JaiMaker
                 Root.programs[i] = (int)program.Value;
                 Root.instrumentBanks[i] = (int)bank.Value; 
                 
+            }
+        }
+
+        private void fillChannelData()
+        {
+            for (int i = 0; i < midiChannelData.RowCount; i++)
+            {
+
+                var text = (Label)midiChannelData.GetControlFromPosition(0, i);
+                var bank = (NumericUpDown)midiChannelData.GetControlFromPosition(1, i);
+                var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
+                //var volume = (TrackBar)midiChannelData.GetControlFromPosition(3, i);
+
+                program.Value = Root.programs[i];
+                bank.Value = Root.instrumentBanks[i];
             }
         }
 
@@ -315,6 +337,7 @@ namespace JaiMaker
             var qc = File.OpenWrite(filename);
             Converter.output = new Be.IO.BeBinaryWriter(qc);
             assembler.output = Converter.output;
+            Converter.MIDIInstrumentRemap = RemapInfo;
             Converter.processSequence();
             qc.Flush();
             qc.Close();
@@ -338,6 +361,7 @@ namespace JaiMaker
                 var myfile = fileSelector.FileName;
                 var b = File.OpenRead(myfile);
                 currentSequence = MidiSequence.Open(b);
+                b.Close();                
 
             } catch (Exception E)
             {
@@ -382,9 +406,9 @@ namespace JaiMaker
         private void doInsetChannel(object sender, EventArgs e)
         {
             var channelNum = btnMap[sender];
-           
-            ((NumericUpDown)midiChannelData.GetControlFromPosition(1, channelNum)).Value  = bankMap[banksList.SelectedIndex];
-            ((NumericUpDown)midiChannelData.GetControlFromPosition(2, channelNum)).Value = progMap[progList.SelectedIndex];
+
+            ((NumericUpDown)midiChannelData.GetControlFromPosition(1, channelNum)).Value = Root.BankNumber;
+            ((NumericUpDown)midiChannelData.GetControlFromPosition(2, channelNum)).Value = Root.ProgNumber;
         }
 
         private void loadINAToolStripMenuItem_Click(object sender, EventArgs e)
@@ -411,7 +435,9 @@ namespace JaiMaker
 
         private void bmsFlavor_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (bmsFlavor.SelectedIndex != 0)            
+                MessageBox.Show("Selected build mode is not yet supported.");
+            bmsFlavor.SelectedIndex = 0;    
         }
 
         private void remapManage_Click(object sender, EventArgs e)
@@ -424,6 +450,44 @@ namespace JaiMaker
         private void madeByXayrToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             new AboutCreatorWindow().ShowDialog();
+        }
+
+        private void savePresetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveJAIMDialog.ShowDialog() != DialogResult.OK)
+                return;
+            var fileHandle = saveJAIMDialog.OpenFile();
+            var writer = new BinaryWriter(fileHandle);
+            var projectFile = new JAIMakerProjectFileV1();
+            projectFile.banks = Root.instrumentBanks;
+            projectFile.programs = Root.programs;
+            projectFile.Remap = RemapInfo;
+            projectFile.save(writer);
+            fileHandle.Flush();
+            fileHandle.Close();
+        }
+
+        private void loadPresetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (openJAIMDialog.ShowDialog() != DialogResult.OK)
+                return;
+            var fileHandle = openJAIMDialog.OpenFile();
+            var reader = new BinaryReader(fileHandle);
+            var projectFile = new JAIMakerProjectFileV1();
+            try
+            {
+                projectFile.load(reader);
+                Root.programs = projectFile.programs;
+                Root.instrumentBanks = projectFile.banks;
+                RemapInfo = projectFile.Remap;
+                fillChannelData();
+
+            } catch (Exception E)
+            {
+                MessageBox.Show("Failed to load JAIM Preset\r\n" + E.Message);
+            }
+
+            fileHandle.Close();
         }
     }
 }

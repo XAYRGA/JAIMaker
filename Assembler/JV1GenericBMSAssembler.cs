@@ -94,7 +94,6 @@ namespace JaiMaker.Assembler
         {
             output.Write((byte)0x9C);
             output.Write((byte)1);
-            Console.WriteLine($"BEND {bend}");
             output.Write(bend);
         }
 
@@ -141,9 +140,14 @@ namespace JaiMaker.Assembler
 
         public override void writeVolume(byte volume)
         {
-            output.Write((byte)0x94); // U8 NODUR
-            output.Write((byte)0); // 0 is volume
-            output.Write(volume); // volume value
+            //output.Write((byte)0x94); // U8 NODUR
+            //output.Write((byte)0); // 0 is volume
+            //output.Write((byte)(volume * 2)); // volume value
+
+            output.Write((byte)0x9C);
+            output.Write((byte)0);
+            output.Write((ushort)(((float)volume / (float)0x7F) * 16383f));
+
         }
 
         public override void writeWait(int delay)

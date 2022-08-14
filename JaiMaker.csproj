@@ -91,6 +91,7 @@
       <DependentUpon>dlgEnterMidiProgram.cs</DependentUpon>
     </Compile>
     <Compile Include="INAFile.cs" />
+    <Compile Include="JAIMakerProjectFile.cs" />
     <Compile Include="JAIMakerSoundInfo.cs" />
     <Compile Include="JAIVersion.cs" />
     <Compile Include="JAI\AABase.cs" />
@@ -122,7 +123,6 @@
     <Compile Include="Root.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="util.cs" />
-    <Compile Include="Visualizer.cs" />
     <EmbeddedResource Include="AboutCreatorWindow.resx">
       <DependentUpon>AboutCreatorWindow.cs</DependentUpon>
     </EmbeddedResource>

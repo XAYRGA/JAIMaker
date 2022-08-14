@@ -132,6 +132,8 @@
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.saveSelector = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.saveJAIMDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openJAIMDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.mainControls.SuspendLayout();
             this.midiChannelData.SuspendLayout();
@@ -258,7 +260,7 @@
             // madeByXayrToolStripMenuItem
             // 
             this.madeByXayrToolStripMenuItem.Name = "madeByXayrToolStripMenuItem";
-            this.madeByXayrToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.madeByXayrToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.madeByXayrToolStripMenuItem.Text = "JAIMaker";
             this.madeByXayrToolStripMenuItem.Click += new System.EventHandler(this.madeByXayrToolStripMenuItem_Click_1);
             // 
@@ -276,12 +278,14 @@
             this.loadPresetToolStripMenuItem.Name = "loadPresetToolStripMenuItem";
             this.loadPresetToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.loadPresetToolStripMenuItem.Text = "Load preset";
+            this.loadPresetToolStripMenuItem.Click += new System.EventHandler(this.loadPresetToolStripMenuItem_Click);
             // 
             // savePresetToolStripMenuItem
             // 
             this.savePresetToolStripMenuItem.Name = "savePresetToolStripMenuItem";
             this.savePresetToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.savePresetToolStripMenuItem.Text = "Save Preset";
+            this.savePresetToolStripMenuItem.Click += new System.EventHandler(this.savePresetToolStripMenuItem_Click);
             // 
             // currentStatus
             // 
@@ -1308,6 +1312,15 @@
             this.pictureBox1.TabIndex = 18;
             this.pictureBox1.TabStop = false;
             // 
+            // saveJAIMDialog
+            // 
+            this.saveJAIMDialog.Filter = "JAIMaker files (*.jaim)|*.jaim|All files (*.*)|*.*";
+            // 
+            // openJAIMDialog
+            // 
+            this.openJAIMDialog.FileName = ".jaim";
+            this.openJAIMDialog.Filter = "JAIMaker files (*.jaim)|*.jaim|All files (*.*)|*.*";
+            // 
             // RootWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1472,6 +1485,8 @@
         private System.Windows.Forms.ToolStripMenuItem loadPresetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem savePresetToolStripMenuItem;
         private System.Windows.Forms.Button remapManage;
+        private System.Windows.Forms.SaveFileDialog saveJAIMDialog;
+        private System.Windows.Forms.OpenFileDialog openJAIMDialog;
     }
 }
 
