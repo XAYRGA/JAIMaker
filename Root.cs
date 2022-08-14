@@ -19,6 +19,7 @@ namespace JaiMaker
         public static InstrumentBank currentBank;
         public static Instrument currentProg;
         public static int ProgNumber;
+        public static int BankNumber;
         public static int currentVel = 125;
         public static int keyOffset = 34;
         public static int[] instrumentBanks = new int[1024];
