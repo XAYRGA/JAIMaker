@@ -80,6 +80,7 @@
     <Compile Include="Assembler\JV2GenericBMSAssembler.cs" />
     <Compile Include="Assembler\JV2SuperMarioGalaxyAssembler.cs" />
     <Compile Include="Assembler\SequenceAssembler.cs" />
+    <Compile Include="jaudio\IBNK_COMMON.CS" />
     <Compile Include="BassBuff\Engine.CS" />
     <Compile Include="BassBuff\SoundEffect.cs" />
     <Compile Include="BassBuff\SoundEffectInstance.cs" />
@@ -93,20 +94,17 @@
     <Compile Include="INAFile.cs" />
     <Compile Include="JAIMakerProjectFile.cs" />
     <Compile Include="JAIMakerSoundInfo.cs" />
-    <Compile Include="JAIVersion.cs" />
-    <Compile Include="JAI\AABase.cs" />
-    <Compile Include="JAI\AAFFile.cs" />
-    <Compile Include="JAI\BAAFile.cs" />
-    <Compile Include="JAI\Helpers.cs" />
+    <Compile Include="jaudio\AudioArchive.cs" />
+    <Compile Include="jaudio\BARC.cs" />
+    <Compile Include="jaudio\BinaryAudioArchive.cs" />
+    <Compile Include="jaudio\IBNK1.cs" />
+    <Compile Include="jaudio\IBNK2.cs" />
+    <Compile Include="jaudio\JASE.cs" />
+    <Compile Include="jaudio\JBS.cs" />
+    <Compile Include="jaudio\JBST.cs" />
+    <Compile Include="jaudio\SFT.cs" />
+    <Compile Include="jaudio\WSYS.cs" />
     <Compile Include="Keyboard.cs" />
-    <Compile Include="JAI\Seq\JaiEventType.cs" />
-    <Compile Include="JAI\Seq\JSequenceState.cs" />
-    <Compile Include="JAI\Seq\Subroutine.cs" />
-    <Compile Include="JAI\Types\Instrument.cs" />
-    <Compile Include="JAI\Types\InstrumentBank.cs" />
-    <Compile Include="JAI\Types\WSYS\WaveSystem.cs" />
-    <Compile Include="JAI\Types\WSYS\WSYSGroup.cs" />
-    <Compile Include="JAI\Types\WSYS\WSYSWave.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,9 +168,7 @@
   <ItemGroup>
     <Content Include="jcion.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="JAI\Seq\Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\SdlDotNet.1.0.0\build\SdlDotNet.targets" Condition="Exists('packages\SdlDotNet.1.0.0\build\SdlDotNet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

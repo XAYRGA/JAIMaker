@@ -311,33 +311,9 @@ namespace JaiMaker
         }
     }
 
-    public class JInstrument
-    {
-        
-        public int mBaseAddress = 0;
 
-        internal const int INST = 0x494E5354;
-        internal const int PER2 = 0x50455232;
-        public bool Percussion = false;
-
-        public static JInstrument CreateFromStream(BeBinaryReader reader, int seekbase)
-        {
-            var magic = reader.ReadUInt32();
-            if (magic == INST)
-                return JStandardInstrumentv1.CreateFromStream(reader, seekbase);
-            else if (magic == PER2)
-                return JPercussion.CreateFromStream(reader, seekbase);
-            return null;
-        }
-
-    }
     public class JStandardInstrumentv1 : JInstrument
     {
-
- 
-
-        public float Pitch;
-        public float Volume;
 
         public JInstrumentOscillatorv1 oscillatorA;
         public JInstrumentOscillatorv1 oscillatorB;
@@ -346,9 +322,7 @@ namespace JaiMaker
         public JInstrumentRandEffectv1 randA;
         public JInstrumentRandEffectv1 randB;
 
-        public JKeyRegionv1[] keys;
-
-        public bool Percussion;
+        public JKeyRegion[] keys;
 
         private void loadFromStream(BeBinaryReader reader, int seekbase)
         {
@@ -532,16 +506,11 @@ namespace JaiMaker
         }
     }
 
+  
+    public class JKeyRegionv1 : JKeyRegion
+    {       
+        public JVelocityRegion[] Velocities;
 
-
-    public class JKeyRegionv1
-    {
-
-        
-        public int mBaseAddress = 0;
-
-        public byte BaseKey;
-        public JVelocityRegionv1[] Velocities;
         private void loadFromStream(BeBinaryReader reader, int seekbase)
         {
             BaseKey = reader.ReadByte();
@@ -574,18 +543,9 @@ namespace JaiMaker
 
     
 
-    public class JVelocityRegionv1
+    public class JVelocityRegionv1 : JVelocityRegion
     {
         
-        public int mBaseAddress = 0;
-
-        public byte Velocity;
-        public ushort WSYSID;
-        public ushort WaveID;
-        public float Volume;
-        public float Pitch;
-
-
         private void loadFromStream(BeBinaryReader reader, int seekbase)
         {
             Velocity = reader.ReadByte();

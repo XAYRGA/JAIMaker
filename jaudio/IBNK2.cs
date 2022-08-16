@@ -43,7 +43,7 @@ namespace JaiMaker
         public JStandardInstrumentv2[] Instruments = new JStandardInstrumentv2[0];
         public JInstrumentPercussionMapv2[] PercussionMaps = new JInstrumentPercussionMapv2[0];
         public JPercussionInstrumentv2[] Percussions = new JPercussionInstrumentv2[0];
-        public JInstrumentv2[] List = new JInstrumentv2[0];
+        public JInstrument[] List = new JInstrument[0];
 
         private Dictionary<int, long> PointerMemory = new Dictionary<int, long>();
 
@@ -260,7 +260,7 @@ namespace JaiMaker
             if (count == 0)
                 return;
 
-            List = new JInstrumentv2[count];
+            List = new JInstrument[count];
 
             var listPointers = util.readInt32Array(rd, count);
 
@@ -610,13 +610,8 @@ namespace JaiMaker
 
     }
 
-    public class JInstrumentv2
-    {
-        public bool Percussion = false;
-        
-        public int mBaseAddress;  
-    }
-    public class JStandardInstrumentv2  : JInstrumentv2
+  
+    public class JStandardInstrumentv2  : JInstrument
     {
         private const int Inst = 0x496E7374; // Instrument
 
@@ -710,23 +705,19 @@ namespace JaiMaker
         {
             mBaseAddress = (int)wr.BaseStream.Position;
             wr.Write(Pmap);
-
-
         }
     }
 
 
 
 
-    public class JPercussionInstrumentv2 : JInstrumentv2
+    public class JPercussionInstrumentv2 : JInstrument
     {
         private const int Perc = 0x50657263; // Percussion 
  
         public int[] OscillatorIndices;
         public int[] EffectIndices;
         public JInstrumentPercussionMapv2[] Keys;
-        public float Volume;
-        public float Pitch;
 
         private void loadFromStream(BeBinaryReader reader)
         {
@@ -789,21 +780,15 @@ namespace JaiMaker
 
     }
 
-    public class JInstrumentVelocityRegionv2
+    public class JInstrumentVelocityRegionv2 : JVelocityRegion
     {
-        public byte Velocity;
-        public short WSYSID;
-        public short WAVEID;
-        public float Volume;
-        public float Pitch;
 
         private void loadFromStream(BeBinaryReader reader)
         {
-           
             Velocity = reader.ReadByte();
             reader.ReadBytes(3);
-            WSYSID = reader.ReadInt16();
-            WAVEID = reader.ReadInt16();
+            WSYSID = reader.ReadUInt16();
+            WaveID = reader.ReadUInt16();
             Volume = reader.ReadSingle();
             Pitch = reader.ReadSingle();
         }
@@ -819,7 +804,7 @@ namespace JaiMaker
             wrt.Write(Velocity);
             wrt.Write(new byte[0x3]);
             wrt.Write(WSYSID);
-            wrt.Write(WAVEID);
+            wrt.Write(WaveID);
             wrt.Write(Volume);
             wrt.Write(Pitch);
         }

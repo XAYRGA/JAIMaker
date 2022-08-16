@@ -111,6 +111,5 @@ namespace JaiMaker
             this.size = size;
             this.flags = flags;
         }
-
     }
 }
