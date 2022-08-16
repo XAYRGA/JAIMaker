@@ -15,6 +15,12 @@ namespace JaiMaker
         public ISequenceAssembler Assembler;
         public MidiSequence MidiSeq;
         public Dictionary<int, JAIMakerSoundInfo> MIDIInstrumentRemap;
+        private enum MessageLevel
+        {
+            ERROR,
+            WARNING,
+            INFO,
+        }
 
         public BeBinaryWriter output;
         
@@ -28,6 +34,7 @@ namespace JaiMaker
         #region Address Storage / Call+Jump management
         private Dictionary<string, int> addressLookup = new Dictionary<string, int>();
         private long MasterLoopDelta = -1;
+        private long MasterLoopDeltaEnd = -1;
         private void flushAddressTable()
         {
             addressLookup = new Dictionary<string, int>();
@@ -44,14 +51,20 @@ namespace JaiMaker
             return outaddr;
         }
 
-        private void message(string message)
+        private void message(string message, MessageLevel level = MessageLevel.INFO)
         {
             var cc = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write("midi2bms - ");
-            Console.ForegroundColor = cc;
+            if (level == MessageLevel.ERROR)
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+            else if (level==MessageLevel.WARNING)
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+            else
+                Console.ForegroundColor = cc;
             Console.WriteLine(message);
-     
+            Console.ForegroundColor = cc;
+
         }
 
         private void goAddress(string name, short offset = 0)
@@ -198,11 +211,37 @@ namespace JaiMaker
                     message($"Split delta for track {trackID} for loop event at {prevDelta + offsetIntoDelta} -- BEFORE {offsetIntoDelta} AFTER {frontDelta}");
                     if (offsetIntoDelta > 0)
                         Assembler.writeWait((int)offsetIntoDelta);
+
                     saveAddress("MASTER_LOOP");
+       
+
+                    if ((frontDelta + offsetIntoDelta) >= MasterLoopDeltaEnd & MasterLoopDeltaEnd > 0)
+                    {
+                        var osd = MasterLoopDeltaEnd - offsetIntoDelta;
+                        Assembler.writeWait((int)osd);
+                        Assembler.writeJump(getAddress("MASTER_LOOP"));
+                        Assembler.writeFinish();
+                        message($"Track front delta exceeds loop end length for {trackID}. Correcting.",MessageLevel.WARNING);
+                        return;
+
+                    }
+                    wroteLoop = true;
                     if (frontDelta > 0)
                         Assembler.writeWait((int)frontDelta);
-                    wroteLoop = true;
 
+                } else if (MasterLoopDeltaEnd > 0 & totalDelta >=MasterLoopDeltaEnd & wroteLoop==true)
+                {
+                    var offsetIntoDelta = MasterLoopDeltaEnd - prevDelta; 
+                    var transitionDelta = totalDelta - prevDelta;
+                    // We don't need FrontDelta, because we're terminating the track. 
+                    if (offsetIntoDelta > 0)
+                        Assembler.writeWait((int)offsetIntoDelta);
+                    if (getAddress("MASTER_LOOP") > 0)
+                        Assembler.writeJump(getAddress("MASTER_LOOP"));
+                    Assembler.writeFinish();
+                    message($"Early subtrack termination ({trackID}) for master loop at delta {offsetIntoDelta + prevDelta}. ");
+
+                    return;
                 }
                 else if (currentEvent.DeltaTime > 0)
                     Assembler.writeWait((int)currentEvent.DeltaTime);
@@ -224,7 +263,7 @@ namespace JaiMaker
                         if (voice > -1)
                             Assembler.writeNoteOn(ev.Note, ev.Velocity, (byte)voice);
                         else
-                            message($"! Voice overflow on track {trackID}");
+                            message($"! Voice overflow on track {trackID}", MessageLevel.ERROR);
                     }
                 }
                 else if (currentEvent is MidiSharp.Events.Voice.Note.OffNoteVoiceMidiEvent)
@@ -235,7 +274,7 @@ namespace JaiMaker
                     if (voiceFree > -1)
                         Assembler.writeNoteOff((byte)voiceFree);
                     else
-                        message($"! Cannot stop voice with ID {voiceFree} because it isn't playing...");
+                        message($"! Cannot stop voice with ID {voiceFree} because it isn't playing...", MessageLevel.ERROR);
                 }
                 else if (currentEvent is MidiSharp.Events.Meta.TempoMetaMidiEvent)
                 {
@@ -304,6 +343,7 @@ namespace JaiMaker
                     if (ev.Text == "MASTER_LOOP_END" || ev.Text == "MLOOPEND" || ev.Text=="loopEnd")
                         if (getAddress("MASTER_LOOP") > 0)
                         {
+                            MasterLoopDeltaEnd = totalDelta;
                             message("Trapped early MASTER_LOOP_END -- terminating track compilation here to save space.");
                             Assembler.writeJump((int)getAddress("MASTER_LOOP"));
                             Assembler.writeFinish();
@@ -312,16 +352,28 @@ namespace JaiMaker
                 }
             }
 
-            if (MasterLoopDelta > 0 && wroteLoop==false) // Can only happen if the track has less data than the loop delta.
+            
+            if (MasterLoopDelta > 0 & wroteLoop==false & MasterLoopDeltaEnd < 0) // Can only happen if the track has less data than the loop delta.
             {
                 var offsetDelta = (int)MasterLoopDelta - (int)totalDelta; // Why long?
                 Assembler.writeWait(offsetDelta);
-                message($"Trapped early-end offset for track {trackID} for master loop at {offsetDelta + totalDelta}");
+                message($"Trapped early-end offset for track {trackID} for master loop at {offsetDelta + totalDelta} (not enough delta??)", MessageLevel.WARNING);
                 saveAddress("MASTER_LOOP");
                 totalDelta -= offsetDelta;  // If we don't do this, the line directly below responsible for synchronizing the ending will make the track wait too long to end.
             }
 
+            if (MasterLoopDeltaEnd > totalDelta)
+            {
+                Assembler.writeWait((int)MasterLoopDeltaEnd - (int)totalDelta);
+                Assembler.writeJump(getAddress("MASTER_LOOP"));
+                Assembler.writeFinish();
+                message($"[!] Not enough delta in track {trackID} for loop! Aligning....", MessageLevel.WARNING);
+                return;
+            }
+
             Assembler.writeWait((int)(lastDelta - totalDelta)); // Synchronize the ending of all tracks
+
+            Assembler.writeFinish(); // close track.
 
             if (getAddress("LOOP") > 0)
                 Assembler.writeJump((int)getAddress("LOOP"));
@@ -329,11 +381,8 @@ namespace JaiMaker
             if (getAddress("MASTER_LOOP") > 0)
                 Assembler.writeJump((int)getAddress("MASTER_LOOP"));
 
-
-            Assembler.writeFinish(); // close track.
-
-            //if (trackID==0)
-            //    Assembler.writePrint("Assembled by JAIMaker");
+            if (trackID==0)
+                Assembler.writePrint("Assembled by JAIMaker");
         }
 
         #endregion
