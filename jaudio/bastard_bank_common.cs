@@ -7,6 +7,13 @@ using Be.IO;
 
 namespace JaiMaker
 {
+
+    public class InstrumentBank
+    {
+        public int globalID;
+        public JInstrument[] instruments;
+    }
+
     public class JVelocityRegion
     {
         public int mBaseAddress = 0;
@@ -21,6 +28,8 @@ namespace JaiMaker
     {
         public int mBaseAddress = 0;
         public byte BaseKey;
+        public JVelocityRegion[] Velocities;
+
     }
 
 
@@ -31,6 +40,8 @@ namespace JaiMaker
 
         public float Pitch = 1;
         public float Volume = 1;
+
+        public JKeyRegion[] Keys;
 
         internal const int INST = 0x494E5354;
         internal const int PER2 = 0x50455232;
@@ -45,6 +56,7 @@ namespace JaiMaker
                 return JPercussion.CreateFromStream(reader, seekbase);
             return null;
         }
+
     }
 
 }

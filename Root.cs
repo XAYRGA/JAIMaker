@@ -14,10 +14,10 @@ namespace JaiMaker
         /// The main entry point for the application.
         /// </summary>
         ///
-        public static AABase g_AAF;
+        public static AudioSystem AudioSystem;
         public static WaveSystem[] allWSYS;
         public static InstrumentBank currentBank;
-        public static Instrument currentProg;
+        public static JInstrument currentProg;
         public static int ProgNumber;
         public static int BankNumber;
         public static int currentVel = 125;

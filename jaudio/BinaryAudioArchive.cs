@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JaiMaker.jaudio
 {
-    internal class BinaryAudioArchive
+    internal class BinaryAudioArchive : AudioSystem
     {
     }
 }

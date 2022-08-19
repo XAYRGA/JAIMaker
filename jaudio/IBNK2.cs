@@ -7,10 +7,9 @@ using Be.IO;
 
 namespace JaiMaker
 {
-    internal class InstrumentBankv2
+    internal class InstrumentBankv2 : InstrumentBank
     {
 
-        public int id;
         public int flags; 
 
 
@@ -40,10 +39,10 @@ namespace JaiMaker
         public JInstrumentOscillatorv2[] Oscillators = new JInstrumentOscillatorv2[0];
         public JInstrumentRandEffectv2[] RandEffects = new JInstrumentRandEffectv2[0];
         public JInstrumentSenseEffectv2[] SenseEffects = new JInstrumentSenseEffectv2[0];
-        public JStandardInstrumentv2[] Instruments = new JStandardInstrumentv2[0];
+        public JStandardInstrumentv2[] Programs = new JStandardInstrumentv2[0];
         public JInstrumentPercussionMapv2[] PercussionMaps = new JInstrumentPercussionMapv2[0];
         public JPercussionInstrumentv2[] Percussions = new JPercussionInstrumentv2[0];
-        public JInstrument[] List = new JInstrument[0];
+   
 
         private Dictionary<int, long> PointerMemory = new Dictionary<int, long>();
 
@@ -97,7 +96,7 @@ namespace JaiMaker
                 throw new InvalidOperationException("Data is not IBNK");
             var ibnkSize = reader.ReadUInt32();
             Boundaries = ibnkSize;
-            id = reader.ReadInt32();
+            globalID = reader.ReadInt32();
             var flags = reader.ReadInt32();
             reader.ReadBytes(0x10);
 
@@ -226,9 +225,9 @@ namespace JaiMaker
             if (count == 0)
                 return;
 
-            Instruments = new JStandardInstrumentv2[count];
+            Programs = new JStandardInstrumentv2[count];
             for (int i = 0;i < count;i++)
-                Instruments[i] = JStandardInstrumentv2.CreateFromStream(rd);
+                Programs[i] = JStandardInstrumentv2.CreateFromStream(rd);
         }
 
         private void loadSensEffs(BeBinaryReader rd, int sensTableOffset)
@@ -260,7 +259,7 @@ namespace JaiMaker
             if (count == 0)
                 return;
 
-            List = new JInstrument[count];
+            instruments = new JInstrument[count];
 
             var listPointers = util.readInt32Array(rd, count);
 
@@ -274,10 +273,10 @@ namespace JaiMaker
                 if (currentListPointer == 0) // There are empty slots in the instrument list... they're 0x00
                     continue;
                
-                for (int i = 0; i < Instruments.Length; i++)
-                    if (Instruments[i].mBaseAddress ==currentListPointer)
+                for (int i = 0; i < Programs.Length; i++)
+                    if (Programs[i].mBaseAddress ==currentListPointer)
                     {
-                        List[lp] = Instruments[i];
+                        instruments[lp] = Programs[i];
                         cont = true; 
                         break;
                     }
@@ -288,7 +287,7 @@ namespace JaiMaker
                 for (int i = 0; i < Percussions.Length; i++)
                     if (Percussions[i].mBaseAddress == currentListPointer)
                     {
-                        List[lp] = Percussions[i];
+                        instruments[lp] = Percussions[i];
                         break;
                     }
             }
@@ -307,7 +306,7 @@ namespace JaiMaker
            
             wr.Write(IBNK);
             storeWritebackPointer(wr, IBNK);
-            wr.Write(id);
+            wr.Write(globalID);
             wr.Write(flags);
             wr.Write(new byte[0x10]); // padding 
 
@@ -375,14 +374,14 @@ namespace JaiMaker
             ///////~ INSTRUMENTS
             wr.Write(INST);
             {
-                if (Instruments.Length == 0)
+                if (Programs.Length == 0)
                     wr.Write(0x0000000400000000);
                 else
                 {
                     storeWritebackPointer(wr, INST);
                     var anchor = wr.BaseStream.Position;
-                    for (int i = 0; i < Instruments.Length; i++)
-                        Instruments[i].WriteToStream(wr);
+                    for (int i = 0; i < Programs.Length; i++)
+                        Programs[i].WriteToStream(wr);
                     fillWritebackPointer(wr, INST, (int)(wr.BaseStream.Position - anchor));
                     util.padTo(wr, 0x04);
                 }
@@ -424,9 +423,7 @@ namespace JaiMaker
     public class JInstrumentEnvelopev2
     {
 
-        
         public int mBaseAddress = 0;
-        
         public int mTableOffset = 0;
         
         public uint mHash = 0;
@@ -617,9 +614,8 @@ namespace JaiMaker
 
         public int[] OscillatorIndices;
         public int[] EffectIndices;
-        public JInstrumentKeyRegionv2[] Keys;
-        public float Volume;
-        public float Pitch;
+        public JKeyRegion[] Keys;
+
 
         private void loadFromStream(BeBinaryReader reader)
         {
@@ -661,7 +657,7 @@ namespace JaiMaker
 
             wr.Write(Keys.Length);
             for (int j = 0; j < Keys.Length; j++)
-                Keys[j].WriteToStream(wr);
+               ( (JInstrumentKeyRegionv2)Keys[j]).WriteToStream(wr);
             wr.Write(Volume);
             wr.Write(Pitch);
         }
@@ -745,16 +741,11 @@ namespace JaiMaker
         {
             mBaseAddress = (int)wr.BaseStream.Position;
             wr.Write(Perc);
-
-     
         }
     }
 
-    public class JInstrumentKeyRegionv2
+    public class JInstrumentKeyRegionv2 : JKeyRegion
     {
-        public byte BaseKey;
-        public JInstrumentVelocityRegionv2[] Velocities;
-
         private void loadFromStream(BeBinaryReader reader)
         {
             BaseKey = reader.ReadByte();
@@ -775,7 +766,7 @@ namespace JaiMaker
         {
             wr.Write(BaseKey);
             for (int i=0; i <Velocities.Length; i++)
-                Velocities[i].WriteToStream(wr);
+                ((JInstrumentVelocityRegionv2)Velocities[i]).WriteToStream(wr);
         }
 
     }

@@ -7,11 +7,9 @@ using Be.IO;
 
 namespace JaiMaker
 {
-    public class JInstrumentBankv1
+    public class JInstrumentBankv1 : InstrumentBank
     {
 
-
-      
         public int mBaseAddress = 0;
  
         public uint mHash = 0;
@@ -20,13 +18,17 @@ namespace JaiMaker
         private const int BANK = 0x42414E4B;
 
         public uint size = 0;
-        public uint globalID = 0;
-        public JInstrument[] instruments = new JInstrument[0xF0];
+ 
+        
         public List<JInstrumentOscillatorv1> Oscillators = new List<JInstrumentOscillatorv1>();
         public List<JInstrumentEnvelopev1> Envelopes = new List<JInstrumentEnvelopev1> ();
         public List<JInstrumentRandEffectv1> RandomEffects = new List<JInstrumentRandEffectv1> ();
         public List<JInstrumentSenseEffectv1> SensorEffects = new List<JInstrumentSenseEffectv1>();
 
+        public JInstrumentBankv1()
+        {
+            instruments = new JInstrument[0xF0];
+        }
 
         public void loadFromStream(BeBinaryReader reader)
         {
@@ -34,7 +36,7 @@ namespace JaiMaker
             if (reader.ReadUInt32() != IBNK)
                 throw new InvalidDataException("Data is not IBNK!");
             size = reader.ReadUInt32();
-            globalID = reader.ReadUInt32();
+            globalID = reader.ReadInt32();
             reader.BaseStream.Position = mountpos + 0x20;
             if (reader.ReadUInt32() != BANK)
                 throw new InvalidDataException("Data is not BANK");
@@ -322,7 +324,7 @@ namespace JaiMaker
         public JInstrumentRandEffectv1 randA;
         public JInstrumentRandEffectv1 randB;
 
-        public JKeyRegion[] keys;
+ 
 
         private void loadFromStream(BeBinaryReader reader, int seekbase)
         {
@@ -340,7 +342,7 @@ namespace JaiMaker
 
             var keyRegCount = reader.ReadUInt32();
             var keyRegPtrs = util.readInt32Array(reader, (int)keyRegCount);
-            keys = new JKeyRegionv1[keyRegCount];
+            Keys = new JKeyRegionv1[keyRegCount];
 
             reader.BaseStream.Position = oscA + seekbase;
             if (oscA > 0)
@@ -372,7 +374,7 @@ namespace JaiMaker
             {
                 reader.BaseStream.Position = keyRegPtrs[i] + seekbase;
                 if (keyRegPtrs[i] != 0)
-                    keys[i] = JKeyRegionv1.CreateFromStream(reader, seekbase);
+                    Keys[i] = JKeyRegionv1.CreateFromStream(reader, seekbase);
             }
         }
         new public static JStandardInstrumentv1 CreateFromStream(BeBinaryReader reader, int seekbase)
@@ -395,9 +397,9 @@ namespace JaiMaker
             wr.Write(effectB == null ? 0 : effectB.mBaseAddress);
             wr.Write(randA == null ? 0 : randA.mBaseAddress);
             wr.Write(randB == null ? 0 : randB.mBaseAddress);
-            wr.Write(keys.Length);
-            for (int i = 0; i < keys.Length; i++)
-                wr.Write(keys[i].mBaseAddress);
+            wr.Write(Keys.Length);
+            for (int i = 0; i < Keys.Length; i++)
+                wr.Write(Keys[i].mBaseAddress);
            
         }
     }
@@ -509,7 +511,7 @@ namespace JaiMaker
   
     public class JKeyRegionv1 : JKeyRegion
     {       
-        public JVelocityRegion[] Velocities;
+
 
         private void loadFromStream(BeBinaryReader reader, int seekbase)
         {

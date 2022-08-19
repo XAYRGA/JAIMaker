@@ -20,9 +20,9 @@ namespace JaiMaker
         public int[] progMap = new int[1024];
         public Dictionary<int, JAIMakerSoundInfo> RemapInfo = new Dictionary<int, JAIMakerSoundInfo>();
         InstrumentBank currentIBNK;
-        Instrument currentInst;
+        JInstrument currentInst;
         MidiSequence currentSequence;
-        JaiSeqX.JAIVersion type;
+
         KeysConverter kk; 
         public bool[] keysPressed = new bool[1024];
         string JaiFile = "";
@@ -93,17 +93,12 @@ namespace JaiMaker
         {
 
             banksList.Items.Clear();
-            var bankidx = 0; 
-            var IBNK = Root.g_AAF.IBNK;
-            for (int i = 0; i < IBNK.Length;i++)
-            {
-                if (IBNK[i]!=null)
-                {
-                    banksList.Items.Add("Bank " + i);
-                    
-                    bankMap[bankidx] = i;
+            var bankidx = 0;
+            var IBNK = Root.AudioSystem.Instruments;
+            foreach(var bank in IBNK) {    
+                    banksList.Items.Add("Bank " + bank.globalID);                    
+                    bankMap[bankidx] = bank.globalID;
                     bankidx++;
-                }
             }
         }
         private void openAAFToolStripMenuItem_Click(object sender, EventArgs e)
@@ -115,14 +110,13 @@ namespace JaiMaker
            // try
            // {
             
-                var wtf = new AAFFile();
-                wtf.LoadAAFile(fileSelector.FileName,JaiSeqX.JAIVersion.ONE);
+                /*
                 JaiFile = fileSelector.FileName;
                 Root.g_AAF = wtf;
                 Root.allWSYS = wtf.WSYS;
                 currentStatus.Text = "AAF Loaded successfully.";
                 EnableFunctions();
-                type = JaiSeqX.JAIVersion.ONE;
+     */
                 
 
            // } catch (Exception E)
@@ -153,15 +147,14 @@ namespace JaiMaker
             {
                 progList.Items.Clear();
                 var progidx = 0;
-                var IBNK = Root.g_AAF.IBNK;
-                if (banksList.SelectedIndex > IBNK.Length || banksList.SelectedIndex > bankMap.Length)
-                {
+                var IBNK = Root.AudioSystem.Instruments;
+                if (banksList.SelectedIndex > IBNK.Count || banksList.SelectedIndex > bankMap.Length)
                     return;
-                }
+              
                 var thisBank = bankMap[banksList.SelectedIndex];
                 var CurrentIBNK = IBNK[thisBank];
                 currentIBNK = CurrentIBNK;
-                Root.BankNumber = currentIBNK.id;
+                Root.BankNumber = currentIBNK.globalID;
                 Dictionary<int, string> mapOut  = null;
                 if (INAMap != null)
                     INAMap.TryGetValue(thisBank, out mapOut);
@@ -169,8 +162,8 @@ namespace JaiMaker
 
 
 
-                for (int i = 0; i < CurrentIBNK.Instruments.Length; i++)
-                    if (CurrentIBNK.Instruments[i] != null)
+                for (int i = 0; i < CurrentIBNK.instruments.Length; i++)
+                    if (CurrentIBNK.instruments[i] != null)
                     {
 
                         string repName = null;
@@ -181,7 +174,7 @@ namespace JaiMaker
 
                         if (repName!=null)
                             progList.Items.Add((i) + " " + repName);                      
-                        else if (CurrentIBNK.Instruments[i].IsPercussion)
+                        else if (CurrentIBNK.instruments[i].Percussion)
                             progList.Items.Add("(PRC)Program " + (i));
                         else
                             progList.Items.Add("Program " + (i));
@@ -263,11 +256,11 @@ namespace JaiMaker
                 if (currentIBNK == null)
                     return;
                        
-                if (progList.SelectedIndex > currentIBNK.Instruments.Length || progList.SelectedIndex > progMap.Length)
+                if (progList.SelectedIndex > currentIBNK.instruments.Length || progList.SelectedIndex > progMap.Length)
                     return;
 
 
-                currentInst = currentIBNK.Instruments[progMap[progList.SelectedIndex]];
+                currentInst = currentIBNK.instruments[progMap[progList.SelectedIndex]];
                 Root.currentProg = currentInst;
                 Root.ProgNumber = progMap[progList.SelectedIndex];
                 updateChannelData();
@@ -309,7 +302,7 @@ namespace JaiMaker
             //MidiToBMS.doToBMS(currentSequence, "test.bms");
 
             exportBMSFile(currentSequence, "test.bms");
-            var args = string.Format("visu \"{0}\" {1} test.bms",JaiFile,(int)type);
+            var args = string.Format("visu \"{0}\" {1} test.bms",JaiFile,0);
             var b = new ProcessStartInfo("JaiSeqX.exe", args);
             var bw = Process.Start(b);
            
@@ -378,14 +371,14 @@ namespace JaiMaker
             try
             {
 
-                var wtf = new BAAFile();
-                wtf.LoadBAAFile(fileSelector.FileName, JaiSeqX.JAIVersion.TWO);
+                /*
                 JaiFile = fileSelector.FileName;
                 Root.g_AAF = wtf;
                 Root.allWSYS = wtf.WSYS;
                 currentStatus.Text = "BAA Loaded successfully.";
                 EnableFunctions();
                 type = JaiSeqX.JAIVersion.TWO;
+                */
 
             }
             catch (Exception E)

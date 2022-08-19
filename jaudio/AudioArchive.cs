@@ -8,12 +8,11 @@ using System.IO;
 
 namespace JaiMaker
 {
-    internal class AudioArchive
+    internal class AudioArchive : AudioSystem
     {
         //public JASE SoundTable;
         public List<JInstrumentBankv1> Instruments = new List<JInstrumentBankv1>(); 
         public List<WaveSystem> WaveSystems = new List<WaveSystem>();
-        public BinaryStreamMap StreamTable = new BinaryStreamMap();
         public List<AudioArchiveSectionInfo> Sections = new List<AudioArchiveSectionInfo>();
 
 
@@ -84,9 +83,6 @@ namespace JaiMaker
                         break;
                     case 2:
                         Instruments.Add(JInstrumentBankv1.CreateFromStream(sect.reader));
-                        break;
-                    case 5: 
-                        StreamTable = BinaryStreamMap.CreateFromStream(sect.reader);
                         break;
                 }
             }

@@ -39,71 +39,73 @@ namespace JaiMaker
         public static void startSound(byte inkey)
         {
             
+         
             var prog = Root.currentProg;
-            if (prog!=null)
+            if (prog != null)
             {
-                var note = pitches[inkey] + Root.keyOffset;
-                var vel = Root.currentVel;
+                /*
+             var note = pitches[inkey] + Root.keyOffset;
+             var vel = Root.currentVel;
 
-                if (prog.Keys[note]!=null)
-                {
-                    var notedata = prog.Keys[note];
-                    var key = notedata.keys[vel];
+             if (prog.Keys[note]!=null)
+             {
+                 var notedata = prog.Keys[note];
+                 var key = notedata.keys[vel];
 
-                    if (key!=null)
-                    {
-                        try
-                        {
-                            var wsysid = key.wsysid;
-                            var waveid = key.wave;
-                            var wsys = Root.allWSYS[wsysid];
-                            if (wsys != null)
-                            {
-                                
-                                var wave = wsys.waves[waveid];
-                                var sound = channelManager.loadSound(wave.pcmpath, wave.loop, wave.loop_start, wave.loop_end).CreateInstance();
-                                var pmul = prog.Pitch * key.Pitch;
-                                var vmul = prog.Volume * key.Volume;
-                                var real_pitch = Math.Pow(2, ((note - wave.key) * pmul) / 12);
-                                var true_volume = (Math.Pow(((float)vel + Root.keyOffset) / 127, 2) * vmul) * 0.5;
-                                sound.Volume = (float)(true_volume * 0.6);
-                                sound.ShouldFade = true;
-                                sound.FadeOutMS = 30;
-                                if (prog.IsPercussion)
-                                {
-                                    real_pitch = (float)(key.Pitch * prog.Pitch);
+                 if (key!=null)
+                 {
+                     try
+                     {
+                         var wsysid = key.wsysid;
+                         var waveid = key.wave;
+                         var wsys = Root.allWSYS[wsysid];
+                         if (wsys != null)
+                         {
 
-                                    sound.ShouldFade = true;
-                                    sound.FadeOutMS = 200; // no instant stops
-                                }
-                                sound.Pitch = (float)(real_pitch);
+                             var wave = wsys.waves[waveid];
+                             var sound = channelManager.loadSound(wave.pcmpath, wave.loop, wave.loop_start, wave.loop_end).CreateInstance();
+                             var pmul = prog.Pitch * key.Pitch;
+                             var vmul = prog.Volume * key.Volume;
+                             var real_pitch = Math.Pow(2, ((note - wave.key) * pmul) / 12);
+                             var true_volume = (Math.Pow(((float)vel + Root.keyOffset) / 127, 2) * vmul) * 0.5;
+                             sound.Volume = (float)(true_volume * 0.6);
+                             sound.ShouldFade = true;
+                             sound.FadeOutMS = 30;
+                             if (prog.IsPercussion)
+                             {
+                                 real_pitch = (float)(key.Pitch * prog.Pitch);
 
-                                channelManager.startVoice(sound, 0, inkey);
-                             
-                                    sound.Play();
-                              
+                                 sound.ShouldFade = true;
+                                 sound.FadeOutMS = 200; // no instant stops
+                             }
+                             sound.Pitch = (float)(real_pitch);
 
-                            }
-                            else
-                            {
-                                Console.WriteLine("Null WSYS??");
-                            }
+                             channelManager.startVoice(sound, 0, inkey);
+
+                                 sound.Play();
+
+
+                         }
+                         else
+                         {
+                             Console.WriteLine("Null WSYS??");
+                         }
+                     }
+                     catch (Exception E)
+                     {
+                         var b = Console.ForegroundColor;
+                         Console.ForegroundColor = ConsoleColor.Red;
+                         Console.WriteLine("fuuuuuck");
+                         Console.WriteLine(E.ToString());
+                         Console.ForegroundColor = b;
+                     }
+                 } else
+                 {
+                     Console.WriteLine("Null key :(");
+                 }
+                 */
                         }
-                        catch (Exception E)
-                        {
-                            var b = Console.ForegroundColor;
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("fuuuuuck");
-                            Console.WriteLine(E.ToString());
-                            Console.ForegroundColor = b;
-                        }
-                    } else
-                    {
-                        Console.WriteLine("Null key :(");
-                    }
-                    
-
-                } else
+            else
                 {
                     Console.WriteLine("ugh.");
                 }
@@ -111,4 +113,4 @@ namespace JaiMaker
            
         }
     }
-}
+

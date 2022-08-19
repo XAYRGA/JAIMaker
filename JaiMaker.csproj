@@ -80,7 +80,9 @@
     <Compile Include="Assembler\JV2GenericBMSAssembler.cs" />
     <Compile Include="Assembler\JV2SuperMarioGalaxyAssembler.cs" />
     <Compile Include="Assembler\SequenceAssembler.cs" />
-    <Compile Include="jaudio\IBNK_COMMON.CS" />
+    <Compile Include="JAMBaseSerializable.cs" />
+    <Compile Include="jaudio\bastard_audiosys_common.cs" />
+    <Compile Include="jaudio\bastard_bank_common.cs" />
     <Compile Include="BassBuff\Engine.CS" />
     <Compile Include="BassBuff\SoundEffect.cs" />
     <Compile Include="BassBuff\SoundEffectInstance.cs" />
@@ -95,14 +97,9 @@
     <Compile Include="JAIMakerProjectFile.cs" />
     <Compile Include="JAIMakerSoundInfo.cs" />
     <Compile Include="jaudio\AudioArchive.cs" />
-    <Compile Include="jaudio\BARC.cs" />
     <Compile Include="jaudio\BinaryAudioArchive.cs" />
     <Compile Include="jaudio\IBNK1.cs" />
     <Compile Include="jaudio\IBNK2.cs" />
-    <Compile Include="jaudio\JASE.cs" />
-    <Compile Include="jaudio\JBS.cs" />
-    <Compile Include="jaudio\JBST.cs" />
-    <Compile Include="jaudio\SFT.cs" />
     <Compile Include="jaudio\WSYS.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="MainWindow.cs">
