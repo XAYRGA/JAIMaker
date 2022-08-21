@@ -38,7 +38,6 @@ namespace JaiMaker.Assembler
         public override void writeFinish()
         {
             output.Write((byte)0xFF);
-            //throw new NotImplementedException();
         }
 
         public override void writeJump(int address)
@@ -95,6 +94,13 @@ namespace JaiMaker.Assembler
             output.Write((byte)0x9C);
             output.Write((byte)1);
             output.Write(bend);
+        }
+
+        public override void writePitchSensitivity(byte sensitivity)
+        {
+            output.Write((byte)0xA4);
+            output.Write((byte)7);
+            output.Write(sensitivity);
         }
 
         public override void writePort(byte port, byte value)

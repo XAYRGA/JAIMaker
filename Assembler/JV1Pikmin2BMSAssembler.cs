@@ -97,6 +97,11 @@ namespace JaiMaker.Assembler
             
         }
 
+        public override void writePitchSensitivity(byte sensitivity)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void writePort(byte port, byte value)
         {
             //throw new NotImplementedException();

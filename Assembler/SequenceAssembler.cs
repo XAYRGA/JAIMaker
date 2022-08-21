@@ -42,5 +42,6 @@ namespace JaiMaker.Assembler
         public abstract void writePitchBend(short bend);
         public abstract void writeVolume(byte volume);
         public abstract void writePanning(byte volume);
+        public abstract void writePitchSensitivity(byte sensitivity);
     }
 }

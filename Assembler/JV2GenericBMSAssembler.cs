@@ -186,5 +186,10 @@ namespace JaiMaker.Assembler
         {
             throw new NotImplementedException();
         }
+
+        public override void writePitchSensitivity(byte sensitivity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -175,15 +175,19 @@ namespace JaiMaker
 
             Assembler.writeFinish();
             util.padTo(output, 32);
+
+            if (MidiSeq.Tracks.Count > 17) {
+                message("!!!! WARNING !!!! The assembler generated more tracks than expected (C1 XX > 0xF)! This will crash if you try to play it on hardware.", MessageLevel.ERROR);
+            }
         }
 
         public void writeTrack(MidiTrack mTrack, byte trackID, int lastDelta)
         {
-
             int currentInst = 0;
             int currentBnk = 0;
             long totalDelta = 0;
             bool wroteLoop = false;
+            int waitParameterNumber = -1;
             freeAddress("MASTER_LOOP");
             freeAddress("LOOP");
 
@@ -274,7 +278,7 @@ namespace JaiMaker
                     if (voiceFree > -1)
                         Assembler.writeNoteOff((byte)voiceFree);
                     else
-                        message($"! Cannot stop voice with ID {voiceFree} because it isn't playing...", MessageLevel.ERROR);
+                        message($"! NOTE_OFF({ev.Note}) did not exist in voice lookup (VID={voiceFree})! Voices may leak!", MessageLevel.ERROR);
                 }
                 else if (currentEvent is MidiSharp.Events.Meta.TempoMetaMidiEvent)
                 {
@@ -312,21 +316,39 @@ namespace JaiMaker
                 }
                 else if (currentEvent is MidiSharp.Events.Voice.ControllerVoiceMidiEvent)
                 {
-
                     var ev = (MidiSharp.Events.Voice.ControllerVoiceMidiEvent)currentEvent;
                     if (ev.Number == (byte)Controller.VolumeCourse)
                         Assembler.writeVolume(ev.Value);
                     else if (ev.Number == (byte)Controller.VolumeFine)
-                        Console.Write("");
+                        Assembler.writeVolume(ev.Value);
                     else if (ev.Number == (byte)Controller.PanPositionCourse)
                         Assembler.writePanning(ev.Value);
                     else if (ev.Number == (byte)Controller.PanPositionFine)
                         Assembler.writePanning(ev.Value);
+                    else if (ev.Number == (byte)Controller.RegisteredParameterCourse)
+                        waitParameterNumber = ev.Value;
+                    else if (ev.Number == (byte)Controller.DataEntryCourse || ev.Number == (byte)Controller.DataEntryFine)
+                        if (waitParameterNumber > -1) { 
+                            message($"rpn prm 0x{waitParameterNumber:X4} -> {ev.Value}",MessageLevel.INFO);
+                            if (waitParameterNumber==0) // RPN 0x0000 PITCH WHEEL RANGE
+                                Assembler.writePitchSensitivity(ev.Value);
+                            waitParameterNumber = -1;
+                        }
+                } else if (currentEvent is MidiSharp.Events.SystemExclusiveMidiEvent)
+                {
+                    var ev = (MidiSharp.Events.SystemExclusiveMidiEvent)currentEvent;
+
+                   // Assembler.writePitchSensitivity(;
+                   for (int ix=0; ix < ev.Data.Length; ix++)
+                        Console.Write($"{ev.Data[ix]:X}-");
+                    
+                    Console.WriteLine();
                 }
                 else if (
                     currentEvent is MidiSharp.Events.Meta.Text.CuePointTextMetaMidiEvent ||
                     currentEvent is MidiSharp.Events.Meta.Text.LyricTextMetaMidiEvent ||
-                    currentEvent is MidiSharp.Events.Meta.Text.MarkerTextMetaMidiEvent
+                    currentEvent is MidiSharp.Events.Meta.Text.MarkerTextMetaMidiEvent    
+         
                  )
                 {
                     var ev = (MidiSharp.Events.Meta.Text.BaseTextMetaMidiEvent)currentEvent;
