@@ -70,7 +70,6 @@ namespace JaiSeqX.Player.BassBuff
             Bass.BASS_ChannelSetAttribute(handle, BASSAttribute.BASS_ATTRIB_FREQ, baseSRate * iPitch); // For good measure, unsure if needed.
             Bass.BASS_ChannelPlay(handle, true); // Tell it to play
 
-
         }
 
         public void FadeStop(int miliseconds)

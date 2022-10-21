@@ -261,6 +261,7 @@ namespace JaiMaker
                         freeVoice(ev.Note);
                     }
 
+                   
                     if (ev.Velocity > 0)
                     {
                         var voice = allocateVoice(ev.Note);
@@ -319,8 +320,8 @@ namespace JaiMaker
                     var ev = (MidiSharp.Events.Voice.ControllerVoiceMidiEvent)currentEvent;
                     if (ev.Number == (byte)Controller.VolumeCourse)
                         Assembler.writeVolume(ev.Value);
-                    else if (ev.Number == (byte)Controller.VolumeFine)
-                        Assembler.writeVolume(ev.Value);
+                    //else if (ev.Number == (byte)Controller.VolumeFine)
+                    //    Assembler.writeVolume(ev.Value);
                     else if (ev.Number == (byte)Controller.PanPositionCourse)
                         Assembler.writePanning(ev.Value);
                     else if (ev.Number == (byte)Controller.PanPositionFine)

@@ -65,11 +65,9 @@ namespace JaiMaker.Assembler
 
         public override void writeNoteOn(int note, int vel, byte voice)
         {
-
             output.Write((byte)note);
             output.Write((byte)(voice + 1));
             output.Write((byte)vel);
-            //throw new NotImplementedException();
         }
 
         public override void writeOpenTrack(byte trkId, int address)
@@ -79,9 +77,11 @@ namespace JaiMaker.Assembler
             util.writeInt24BE(output, address);
         }
 
-        public override void writePanning(byte volume)
+        public override void writePanning(byte panning)
         {
-            //throw new NotImplementedException();
+            output.Write((byte)0x9C);
+            output.Write((byte)0x03); // Panning
+            output.Write((ushort)(((float)panning / (float)0x7F) * 32767f));
         }
 
         public override void writeParentPort(byte port, byte value)
@@ -152,8 +152,7 @@ namespace JaiMaker.Assembler
 
             output.Write((byte)0x9C);
             output.Write((byte)0);
-            output.Write((ushort)(((float)volume / (float)0x7F) * 16383f));
-
+            output.Write((ushort)(((float)volume / (float)0x7F) * 32767f));
         }
 
         public override void writeWait(int delay)
