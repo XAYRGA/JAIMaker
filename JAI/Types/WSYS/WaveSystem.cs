@@ -56,7 +56,7 @@ namespace JaiSeqX.JAI.Types.WSYS
         private long BaseAddress;
 
         private int current_header = 0; // utility
-        private int back = 0; // utility
+
 
         public void LoadWSYS(BeBinaryReader WSYSReader)
         {

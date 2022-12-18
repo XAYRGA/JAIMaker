@@ -39,6 +39,7 @@
             this.tbName = new System.Windows.Forms.TextBox();
             this.lbName = new System.Windows.Forms.Label();
             this.lblMidiProg = new System.Windows.Forms.Label();
+            this.help = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nsProg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nsBank)).BeginInit();
             this.SuspendLayout();
@@ -56,9 +57,9 @@
             // remapList
             // 
             this.remapList.FormattingEnabled = true;
-            this.remapList.Location = new System.Drawing.Point(12, 12);
+            this.remapList.Location = new System.Drawing.Point(12, 38);
             this.remapList.Name = "remapList";
-            this.remapList.Size = new System.Drawing.Size(331, 160);
+            this.remapList.Size = new System.Drawing.Size(331, 134);
             this.remapList.TabIndex = 1;
             this.remapList.SelectedIndexChanged += new System.EventHandler(this.remapList_SelectedIndexChanged);
             // 
@@ -153,11 +154,22 @@
             this.lblMidiProg.TabIndex = 10;
             this.lblMidiProg.Text = "MIDI Program: N/A";
             // 
+            // help
+            // 
+            this.help.Location = new System.Drawing.Point(12, 12);
+            this.help.Name = "help";
+            this.help.Size = new System.Drawing.Size(331, 20);
+            this.help.TabIndex = 11;
+            this.help.Text = "What is this?";
+            this.help.UseVisualStyleBackColor = true;
+            this.help.Click += new System.EventHandler(this.help_Click);
+            // 
             // RemapInstrumentWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(355, 293);
+            this.Controls.Add(this.help);
             this.Controls.Add(this.lblMidiProg);
             this.Controls.Add(this.lbName);
             this.Controls.Add(this.tbName);
@@ -192,5 +204,6 @@
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.Label lbName;
         private System.Windows.Forms.Label lblMidiProg;
+        private System.Windows.Forms.Button help;
     }
 }

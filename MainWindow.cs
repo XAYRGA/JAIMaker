@@ -236,11 +236,12 @@ namespace JaiMaker
                 var text = (Label)midiChannelData.GetControlFromPosition(0, i);
                 var bank = (NumericUpDown)midiChannelData.GetControlFromPosition(1, i);
                 var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
-                //var volume = (TrackBar)midiChannelData.GetControlFromPosition(3, i);
+                var volume = (TrackBar)midiChannelData.GetControlFromPosition(4, i);
 
                 Root.programs[i] = (int)program.Value;
-                Root.instrumentBanks[i] = (int)bank.Value; 
-                
+                Root.instrumentBanks[i] = (int)bank.Value;
+                Root.volumes[i] = (int)volume.Value;
+
             }
         }
 
@@ -252,10 +253,11 @@ namespace JaiMaker
                 var text = (Label)midiChannelData.GetControlFromPosition(0, i);
                 var bank = (NumericUpDown)midiChannelData.GetControlFromPosition(1, i);
                 var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
-                //var volume = (TrackBar)midiChannelData.GetControlFromPosition(3, i);
+                var volume = (TrackBar)midiChannelData.GetControlFromPosition(4, i);
 
                 program.Value = Root.programs[i];
                 bank.Value = Root.instrumentBanks[i];
+                volume.Value = Root.volumes[i];
             }
         }
 
@@ -458,10 +460,11 @@ namespace JaiMaker
                 return;
             var fileHandle = saveJAIMDialog.OpenFile();
             var writer = new BinaryWriter(fileHandle);
-            var projectFile = new JAIMakerProjectFileV1();
+            var projectFile = new JAIMakerProjectFileV2();
             projectFile.banks = Root.instrumentBanks;
             projectFile.programs = Root.programs;
             projectFile.Remap = RemapInfo;
+            projectFile.volumes = Root.volumes; 
             projectFile.save(writer);
             fileHandle.Flush();
             fileHandle.Close();
@@ -473,12 +476,13 @@ namespace JaiMaker
                 return;
             var fileHandle = openJAIMDialog.OpenFile();
             var reader = new BinaryReader(fileHandle);
-            var projectFile = new JAIMakerProjectFileV1();
+            var projectFile = new JAIMakerProjectFileV2();
             try
             {
                 projectFile.load(reader);
                 Root.programs = projectFile.programs;
                 Root.instrumentBanks = projectFile.banks;
+                Root.volumes = projectFile.volumes;
                 RemapInfo = projectFile.Remap;
                 fillChannelData();
 
@@ -488,6 +492,21 @@ namespace JaiMaker
             }
 
             fileHandle.Close();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar17_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

@@ -15,6 +15,9 @@ namespace JaiMaker
         public ISequenceAssembler Assembler;
         public MidiSequence MidiSeq;
         public Dictionary<int, JAIMakerSoundInfo> MIDIInstrumentRemap;
+
+
+
         private enum MessageLevel
         {
             ERROR,
@@ -35,6 +38,8 @@ namespace JaiMaker
         private Dictionary<string, int> addressLookup = new Dictionary<string, int>();
         private long MasterLoopDelta = -1;
         private long MasterLoopDeltaEnd = -1;
+        private bool HasLegacyLoop = false;
+
         private void flushAddressTable()
         {
             addressLookup = new Dictionary<string, int>();
@@ -135,11 +140,33 @@ namespace JaiMaker
             return -1;
         }
 
-   
 
+        private void preScanSequence()
+        {
+            for (int trk = 0; trk < MidiSeq.Tracks.Count; trk++)
+            {
+                var mTrack = MidiSeq.Tracks[trk];
+                for (int i = 0; i < mTrack.Events.Count; i++)
+                {
+                    var currentEvent = mTrack.Events[i];
+                    if (currentEvent is MidiSharp.Events.Meta.Text.BaseTextMetaMidiEvent)
+                    {
+                        var ev = (MidiSharp.Events.Meta.Text.BaseTextMetaMidiEvent)currentEvent;
+                        if (ev.Text == "JLOOP" || ev.Text == "LOOP")
+                        {
+                            HasLegacyLoop = true;
+                            message("!!! Legacy JLOOP method detected! Tempo changes not supported!", MessageLevel.WARNING);
+                        }
+                    }             
+                }
+            }
+        }
 
         public void processSequence()
         {
+            HasLegacyLoop = false;
+            preScanSequence();
+
             var endDelta = calculateEndingDelta(MidiSeq);
             message("====================================================");
             if (Assembler != null)
@@ -170,6 +197,7 @@ namespace JaiMaker
                     goAddress("last"); // Reuturn
                 }
                 writeTrack(MidiSeq.Tracks[trk], (byte)(trk), endDelta);
+                util.padTo(output, 32);
                 message($"Finished assembling TRK{trk:X2}");
             }
 
@@ -190,6 +218,9 @@ namespace JaiMaker
             int waitParameterNumber = -1;
             freeAddress("MASTER_LOOP");
             freeAddress("LOOP");
+
+            if (HasLegacyLoop)
+                saveAddress("LOOP");
 
             int rpn = 4; // Pitchwheel range. 
             if (trackID != 0)
@@ -396,16 +427,20 @@ namespace JaiMaker
 
             Assembler.writeWait((int)(lastDelta - totalDelta)); // Synchronize the ending of all tracks
 
-            Assembler.writeFinish(); // close track.
-
             if (getAddress("LOOP") > 0)
+            {
                 Assembler.writeJump((int)getAddress("LOOP"));
+                Console.WriteLine($"Place legacy loop on track {trackID}");
+            }
 
             if (getAddress("MASTER_LOOP") > 0)
                 Assembler.writeJump((int)getAddress("MASTER_LOOP"));
 
+
+            Assembler.writeFinish(); // close track.
+
             if (trackID==0)
-                Assembler.writePrint("Assembled by JAIMaker");
+                Assembler.writePrint("Assembled by Xayrga's JAIMaker");
         }
 
         #endregion

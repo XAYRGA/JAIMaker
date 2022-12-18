@@ -125,5 +125,10 @@ namespace JaiMaker
             nsProg.Value = CurrentRemap.prog;
 
         }
+
+        private void help_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This is for remapping MIDI instruments to banks / programs.\nIf you add a MIDI program here that is of the value of, example, 53. Now whenever the MIDI tries to change instrument to that, it will select whatever bank / program is associated with it.");
+        }
     }
 }
