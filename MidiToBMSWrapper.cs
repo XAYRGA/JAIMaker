@@ -175,7 +175,7 @@ namespace JaiMaker
             Assembler.writeTempoChange((short)MidiSeq.TicksPerBeatOrFrame);
             message($"Assembler ticks per frame {(short)MidiSeq.TicksPerBeatOrFrame}");
             Assembler.writeTimebaseChange((short)120);
-
+            Assembler.writePrint("Assembled by JAIMaker!");
             for (int trk = 0; trk < MidiSeq.Tracks.Count; trk++)
             {
                 if (trk == 0)
@@ -191,11 +191,12 @@ namespace JaiMaker
                 if (trk != 0) // root track doesn't need opening.
                 {
                     saveAddress("last"); // Save previous address (where we're opening from)
-                    goAddress($"trk{trk-1}Open"); // Go back to header and write the address where that track starts
+                    goAddress($"trk{trk-1}Open"); // Go back to header and write the address where that track starts                      
                     Assembler.writeOpenTrack((byte)(trk -1), getAddress($"last"));
                     freeAddress($"trk{trk-1}Open");
                     goAddress("last"); // Reuturn
                 }
+     
                 writeTrack(MidiSeq.Tracks[trk], (byte)(trk), endDelta);
                 util.padTo(output, 32);
                 message($"Finished assembling TRK{trk:X2}");
@@ -223,11 +224,15 @@ namespace JaiMaker
                 saveAddress("LOOP");
 
             int rpn = 4; // Pitchwheel range. 
+            var trackIndex = trackID - 1;
             if (trackID != 0)
             {
-                Assembler.writeBankChange((byte)Root.instrumentBanks[trackID - 1]); // 0xa4 0x20 0xYY
-                Assembler.writeProgramChange((byte)Root.programs[trackID - 1]); // 0xA4 0x21 0xYY ??
+                Assembler.writeBankChange((byte)Root.instrumentBanks[trackIndex]); // 0xa4 0x20 0xYY
+                Assembler.writeProgramChange((byte)Root.programs[trackIndex]); // 0xA4 0x21 0xYY ??
+                if (Root.volumes[trackIndex] != -1)
+                    Assembler.writeVolume((byte)Root.volumes[trackIndex]);                
             }
+           
 
 
             for (int i = 0; i < mTrack.Events.Count; i++)
@@ -236,7 +241,10 @@ namespace JaiMaker
                 var prevDelta = totalDelta;
                 totalDelta += currentEvent.DeltaTime;
 
-                if (MasterLoopDelta >= 0 & totalDelta >= MasterLoopDelta & wroteLoop == false)
+                //Console.WriteLine($"{trackID} DEL: {MasterLoopDelta} CUR: {totalDelta}");
+
+
+                if (MasterLoopDelta >= 0 && totalDelta >= MasterLoopDelta && wroteLoop == false)
                 {
                     var offsetIntoDelta = MasterLoopDelta - prevDelta; // What did the last one not fulfil. 
                     var transitionDelta = totalDelta - prevDelta; // Time between current and last event
@@ -264,7 +272,7 @@ namespace JaiMaker
                     if (frontDelta > 0)
                         Assembler.writeWait((int)frontDelta);
 
-                } else if (MasterLoopDeltaEnd > 0 & totalDelta >=MasterLoopDeltaEnd & wroteLoop==true)
+                } else if (MasterLoopDeltaEnd > 0 && totalDelta >=MasterLoopDeltaEnd && wroteLoop==true)
                 {
                     var offsetIntoDelta = MasterLoopDeltaEnd - prevDelta; 
                     var transitionDelta = totalDelta - prevDelta;
@@ -297,7 +305,7 @@ namespace JaiMaker
                     {
                         var voice = allocateVoice(ev.Note);
                         if (voice > -1)
-                            Assembler.writeNoteOn(ev.Note, ev.Velocity, (byte)voice);
+                            Assembler.writeNoteOn(ev.Note + Root.offsets[trackIndex], ev.Velocity, (byte)voice);
                         else
                             message($"! Voice overflow on track {trackID}", MessageLevel.ERROR);
                     }
@@ -349,11 +357,11 @@ namespace JaiMaker
                 else if (currentEvent is MidiSharp.Events.Voice.ControllerVoiceMidiEvent)
                 {
                     var ev = (MidiSharp.Events.Voice.ControllerVoiceMidiEvent)currentEvent;
-                    if (ev.Number == (byte)Controller.VolumeCourse)
+                    if (ev.Number == (byte)Controller.VolumeCourse && Root.volumes[trackIndex]==-1 && trackID!=0)
                         Assembler.writeVolume(ev.Value);
                     //else if (ev.Number == (byte)Controller.VolumeFine)
                     //    Assembler.writeVolume(ev.Value);
-                    else if (ev.Number == (byte)Controller.PanPositionCourse)
+                    else if (ev.Number == (byte)Controller.PanPositionCourse)                      
                         Assembler.writePanning(ev.Value);
                     else if (ev.Number == (byte)Controller.PanPositionFine)
                         Assembler.writePanning(ev.Value);
@@ -387,14 +395,14 @@ namespace JaiMaker
                     if (ev.Text == "JLOOP" || ev.Text == "LOOP")
                         saveAddress("LOOP");
 
-                    if (ev.Text == "MASTER_LOOP" || ev.Text == "MLOOP" || ev.Text == "loopStart")
+                    if (ev.Text == "MASTER_LOOP" || ev.Text == "MLOOP" || ev.Text == "loopStart" || ev.Text == "startLoop" || ev.Text=="loop_start")
                     {
                         MasterLoopDelta = totalDelta;
                         message($"Trapped loop_start event -- delta offset {totalDelta}");
                     }
                     
 
-                    if (ev.Text == "MASTER_LOOP_END" || ev.Text == "MLOOPEND" || ev.Text=="loopEnd")
+                    if (ev.Text == "MASTER_LOOP_END" || ev.Text == "MLOOPEND" || ev.Text=="loopEnd" || ev.Text == "endLoop" || ev.Text == "loop_end")
                         if (getAddress("MASTER_LOOP") > 0)
                         {
                             MasterLoopDeltaEnd = totalDelta;
@@ -403,11 +411,12 @@ namespace JaiMaker
                             Assembler.writeFinish();
                             return;
                         }
+                    Assembler.writePrint($"ev:{ev.Text}");
                 }
             }
 
             
-            if (MasterLoopDelta > 0 & wroteLoop==false & MasterLoopDeltaEnd < 0) // Can only happen if the track has less data than the loop delta.
+            if (MasterLoopDelta > 0 && wroteLoop==false && MasterLoopDeltaEnd < 0) // Can only happen if the track has less data than the loop delta.
             {
                 var offsetDelta = (int)MasterLoopDelta - (int)totalDelta; // Why long?
                 Assembler.writeWait(offsetDelta);
@@ -416,8 +425,11 @@ namespace JaiMaker
                 totalDelta -= offsetDelta;  // If we don't do this, the line directly below responsible for synchronizing the ending will make the track wait too long to end.
             }
 
+            // Writes the delta 
             if (MasterLoopDeltaEnd > totalDelta)
             {
+                if (getAddress("MASTER_LOOP") < 0)
+                    saveAddress("MASTER_LOOP");
                 Assembler.writeWait((int)MasterLoopDeltaEnd - (int)totalDelta);
                 Assembler.writeJump(getAddress("MASTER_LOOP"));
                 Assembler.writeFinish();
@@ -433,14 +445,13 @@ namespace JaiMaker
                 Console.WriteLine($"Place legacy loop on track {trackID}");
             }
 
-            if (getAddress("MASTER_LOOP") > 0)
+            // The loop is PERFECT.
+            if (getAddress("MASTER_LOOP") > 0 && wroteLoop == false)
                 Assembler.writeJump((int)getAddress("MASTER_LOOP"));
 
 
             Assembler.writeFinish(); // close track.
 
-            if (trackID==0)
-                Assembler.writePrint("Assembled by Xayrga's JAIMaker");
         }
 
         #endregion

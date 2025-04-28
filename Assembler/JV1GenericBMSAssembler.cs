@@ -9,6 +9,7 @@ namespace JaiMaker.Assembler
 {
     class JV1GenericBMSAssembler : ISequenceAssembler
     {
+        private const float PAN_EXTENTS = 64f;
         public JV1GenericBMSAssembler()
         {
             game = "GENERIC_V1";
@@ -75,13 +76,14 @@ namespace JaiMaker.Assembler
             output.Write((byte)0xC1);
             output.Write(trkId);
             util.writeInt24BE(output, address);
+
         }
 
         public override void writePanning(byte panning)
         {
-            output.Write((byte)0x9C);
-            output.Write((byte)0x03); // Panning
-            output.Write((ushort)(((float)panning / (float)0x7F) * 32767f));
+            output.Write((byte)0x98);
+            output.Write((byte)0x03); // Panning         
+            output.Write(panning);
         }
 
         public override void writeParentPort(byte port, byte value)
@@ -144,6 +146,7 @@ namespace JaiMaker.Assembler
             //throw new NotImplementedException();
         }
 
+        
         public override void writeVolume(byte volume)
         {
             //output.Write((byte)0x94); // U8 NODUR

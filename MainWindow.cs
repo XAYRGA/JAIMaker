@@ -113,12 +113,16 @@ namespace JaiMaker
         {
             Console.WriteLine("Opening AAF.");
             currentStatus.Text = "Opening AAF";
+            fileSelector.Filter = "Audio Archive Files (*.aaf)|*.aaf|All files (*.*)|*.*";
             var dlgr = fileSelector.ShowDialog();
-           
-           // try
-           // {
-            
-                var wtf = new AAFFile();
+
+            if (dlgr == DialogResult.Cancel)
+                return;
+
+            // try
+            // {
+
+            var wtf = new AAFFile();
                 wtf.LoadAAFile(fileSelector.FileName,JaiSeqX.JAIVersion.ONE);
                 JaiFile = fileSelector.FileName;
                 Root.g_AAF = wtf;
@@ -237,11 +241,12 @@ namespace JaiMaker
                 var bank = (NumericUpDown)midiChannelData.GetControlFromPosition(1, i);
                 var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
                 var volume = (TrackBar)midiChannelData.GetControlFromPosition(4, i);
+                var offset = (NumericUpDown)midiChannelData.GetControlFromPosition(5, i);
 
                 Root.programs[i] = (int)program.Value;
                 Root.instrumentBanks[i] = (int)bank.Value;
                 Root.volumes[i] = (int)volume.Value;
-
+                Root.offsets[i] = (int)offset.Value;
             }
         }
 
@@ -254,10 +259,12 @@ namespace JaiMaker
                 var bank = (NumericUpDown)midiChannelData.GetControlFromPosition(1, i);
                 var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
                 var volume = (TrackBar)midiChannelData.GetControlFromPosition(4, i);
+                var offset = (NumericUpDown)midiChannelData.GetControlFromPosition(5, i);
 
                 program.Value = Root.programs[i];
                 bank.Value = Root.instrumentBanks[i];
                 volume.Value = Root.volumes[i];
+                offset.Value = Root.offsets[i];
             }
         }
 
@@ -314,8 +321,8 @@ namespace JaiMaker
             //MidiToBMS.doToBMS(currentSequence, "test.bms");
 
             exportBMSFile(currentSequence, "test.bms");
-            var args = string.Format("visu \"{0}\" {1} test.bms",JaiFile,(int)type);
-            var b = new ProcessStartInfo("JaiSeqX.exe", args);
+            var args = string.Format("\"{0}\" visu test.bms {1}", JaiFile,(int)type);
+            var b = new ProcessStartInfo("jaiseqx.exe", args);
             var bw = Process.Start(b);
            
             bw.WaitForExit();
@@ -359,7 +366,12 @@ namespace JaiMaker
             try
             {
                 fileSelector.Title = "Open MIDI file";
-                fileSelector.ShowDialog();
+                fileSelector.Filter = "MIDI Files (*.midi; *.mid)|*.midi;*.mid|All files (*.*)|*.*";
+                var dlgr = fileSelector.ShowDialog();
+
+                if (dlgr == DialogResult.Cancel)
+                    return;
+
                 var myfile = fileSelector.FileName;
                 var b = File.OpenRead(myfile);
                 currentSequence = MidiSequence.Open(b);
@@ -418,7 +430,14 @@ namespace JaiMaker
             try
             {
                 fileSelector.Title = "Open INA file";
-                fileSelector.ShowDialog();
+                fileSelector.Filter = "Instrument Name Atlas Files (*.ina;*.txt)|*.ina;*.txt|All files (*.*)|*.*";
+
+
+                var dlgr =  fileSelector.ShowDialog();
+
+                if (dlgr == DialogResult.Cancel)
+                    return;
+
                 var myfile = fileSelector.FileName;
                 INAMap= INAFile.parse(myfile);
                 MessageBox.Show("INA File loaded successfully.");
@@ -460,11 +479,12 @@ namespace JaiMaker
                 return;
             var fileHandle = saveJAIMDialog.OpenFile();
             var writer = new BinaryWriter(fileHandle);
-            var projectFile = new JAIMakerProjectFileV2();
+            var projectFile = new JAIMakerProjectFileV3();
             projectFile.banks = Root.instrumentBanks;
             projectFile.programs = Root.programs;
             projectFile.Remap = RemapInfo;
-            projectFile.volumes = Root.volumes; 
+            projectFile.volumes = Root.volumes;
+            projectFile.offsets = Root.offsets;
             projectFile.save(writer);
             fileHandle.Flush();
             fileHandle.Close();
@@ -476,13 +496,14 @@ namespace JaiMaker
                 return;
             var fileHandle = openJAIMDialog.OpenFile();
             var reader = new BinaryReader(fileHandle);
-            var projectFile = new JAIMakerProjectFileV2();
+            var projectFile = new JAIMakerProjectFileV3();
             try
             {
                 projectFile.load(reader);
                 Root.programs = projectFile.programs;
                 Root.instrumentBanks = projectFile.banks;
                 Root.volumes = projectFile.volumes;
+                Root.offsets = projectFile.offsets;
                 RemapInfo = projectFile.Remap;
                 fillChannelData();
 
@@ -505,6 +526,11 @@ namespace JaiMaker
         }
 
         private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label25_Click(object sender, EventArgs e)
         {
 
         }

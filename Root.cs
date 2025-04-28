@@ -29,6 +29,7 @@ namespace JaiMaker
         public static int[] instrumentBanks = new int[64];
         public static int[] programs = new int[64];
         public static int[] volumes = new int[16];
+        public static int[] offsets = new int[16];
         public static int Tempo = 120;
 
 
@@ -36,8 +37,21 @@ namespace JaiMaker
         [STAThread]
         static void Main()
         {
+            Console.WriteLine(@"       _         _____ __  __       _               __ ");
+            Console.WriteLine(@"      | |  /\   |_   _|  \/  |     | |             /_ |");
+            Console.WriteLine(@"      | | /  \    | | | \  / | __ _| | _____ _ __   | |");
+            Console.WriteLine(@"  _   | |/ /\ \   | | | |\/| |/ _` | |/ / _ \ '__|  | |");
+            Console.WriteLine(@" | |__| / ____ \ _| |_| |  | | (_| |   <  __/ |     | |");
+            Console.WriteLine(@"  \____/_/    \_\_____|_|  |_|\__,_|_|\_\___|_|     |_|");
+            Console.WriteLine(@"  Created by XAYRGA! -- http://www.xayr.gay/           ");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+
             //MidiToBMS.doToBMS();
-            
+
             Engine.Init(); // Start audio engine.
             Keyboard.init();
             // Visualizer.Init();
