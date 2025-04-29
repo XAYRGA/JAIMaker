@@ -191,5 +191,30 @@ namespace JaiMaker.Assembler
         {
             throw new NotImplementedException();
         }
+
+        public override void writeInterrupt(byte level, int addr)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void writeCall(byte condition, int addr)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void writeReturn(byte cond)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void writeInterruptReturn()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void writeSync(ushort arg)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

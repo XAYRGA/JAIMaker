@@ -19,6 +19,11 @@ namespace JaiMaker.Assembler
             output = wrt;
         }
 
+        public abstract void writeSync(ushort arg);
+        public abstract void writeInterrupt(byte level, int addr);
+        public abstract void writeInterruptReturn();
+        public abstract void writeCall(byte condition, int addr);
+        public abstract void writeReturn(byte cond);      
         public abstract void writeNoteOn(int note, int vel, byte voice);
         public abstract void writeNoteOff(byte voice);
         public abstract void writeWait(int delay);

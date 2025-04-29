@@ -98,9 +98,7 @@
       <DependentUpon>AboutCreatorWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Assembler\JV1GenericBMSAssembler.cs" />
-    <Compile Include="Assembler\JV1Pikmin2BMSAssembler.cs" />
     <Compile Include="Assembler\JV2GenericBMSAssembler.cs" />
-    <Compile Include="Assembler\JV2SuperMarioGalaxyAssembler.cs" />
     <Compile Include="Assembler\SequenceAssembler.cs" />
     <Compile Include="BassBuff\Engine.CS" />
     <Compile Include="BassBuff\SoundEffect.cs" />

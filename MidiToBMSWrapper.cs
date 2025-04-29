@@ -39,6 +39,8 @@ namespace JaiMaker
         private long MasterLoopDelta = -1;
         private long MasterLoopDeltaEnd = -1;
         private bool HasLegacyLoop = false;
+        private bool HasDynamic = false;
+
 
         private void flushAddressTable()
         {
@@ -120,6 +122,8 @@ namespace JaiMaker
             return -1;
         }
 
+
+
         private int isVoiceAllocated(int note)
         {
             for (int i = 0; i < 7; i++)
@@ -128,6 +132,16 @@ namespace JaiMaker
 
             return -1;
         }
+
+
+        private bool isAnyVoiceAllocated()
+        {
+            for (int i = 0; i < 7; i++)
+                if (voiceLookup[i] > 0)
+                    return true;
+            return false;
+        }
+
 
         private int freeVoice(int note)
         {
@@ -164,6 +178,11 @@ namespace JaiMaker
 
         public void processSequence()
         {
+
+            for (int i = 0; i < 16; i++)
+                if (Root.dynamics[i])
+                    HasDynamic = true;
+
             HasLegacyLoop = false;
             preScanSequence();
 
@@ -183,6 +202,7 @@ namespace JaiMaker
                 saveAddress($"trk{trk - 1}Open");
                 Assembler.writeOpenTrack((byte)trk, 0);
             }
+       
         
             // These tracks are all -1 because we want to write the control / tempo track + the melodic tracks, but we don't need to write an opener for the tempo track.
             for (int trk = 0; trk < MidiSeq.Tracks.Count; trk++) // 
@@ -195,14 +215,29 @@ namespace JaiMaker
                     Assembler.writeOpenTrack((byte)(trk -1), getAddress($"last"));
                     freeAddress($"trk{trk-1}Open");
                     goAddress("last"); // Reuturn
-                }
+                } 
      
                 writeTrack(MidiSeq.Tracks[trk], (byte)(trk), endDelta);
                 util.padTo(output, 32);
                 message($"Finished assembling TRK{trk:X2}");
+                
+                if (trk==0)
+                {
+                    Assembler.writeFinish();
+
+                    saveAddress("interrupt_address");                    
+                    Assembler.writeSync(0x1F00);
+                    Assembler.writeInterruptReturn();
+                    //siis
+                    saveAddress("dynamic_call_address");
+                    Assembler.writeSync(0);
+                    Assembler.writeSync(0xF00);
+                    Assembler.writeInterrupt(7, getAddress("interrupt_address"));
+                    Assembler.writeReturn(0);
+                }
             }
 
-            Assembler.writeFinish();
+            //Assembler.writeFinish();
             util.padTo(output, 32);
 
             if (MidiSeq.Tracks.Count > 17) {
@@ -217,14 +252,30 @@ namespace JaiMaker
             long totalDelta = 0;
             bool wroteLoop = false;
             int waitParameterNumber = -1;
+            var trackIndex = trackID - 1;
+
+            var currentPan = 0;
+            var targetPan = 0;
             freeAddress("MASTER_LOOP");
             freeAddress("LOOP");
+            
+            if (trackID != 0 && Root.dynamics[trackIndex])
+            {
+                Assembler.writeCall(0, getAddress("dynamic_call_address"));
+                //Assembler.writePrint($"Trk {trackID} dynamic");
+                message("Integrating dynamic music call....");
+            }
+
+
+           
+
+
 
             if (HasLegacyLoop)
                 saveAddress("LOOP");
 
             int rpn = 4; // Pitchwheel range. 
-            var trackIndex = trackID - 1;
+         
             if (trackID != 0)
             {
                 Assembler.writeBankChange((byte)Root.instrumentBanks[trackIndex]); // 0xa4 0x20 0xYY
@@ -303,6 +354,13 @@ namespace JaiMaker
                    
                     if (ev.Velocity > 0)
                     {
+                        if (targetPan != currentPan)
+                        {
+                            Assembler.writePanning((byte)targetPan);
+                            currentPan = targetPan;
+                        }
+
+
                         var voice = allocateVoice(ev.Note);
                         if (voice > -1)
                             Assembler.writeNoteOn(ev.Note + Root.offsets[trackIndex], ev.Velocity, (byte)voice);
@@ -357,20 +415,35 @@ namespace JaiMaker
                 else if (currentEvent is MidiSharp.Events.Voice.ControllerVoiceMidiEvent)
                 {
                     var ev = (MidiSharp.Events.Voice.ControllerVoiceMidiEvent)currentEvent;
-                    if (ev.Number == (byte)Controller.VolumeCourse && Root.volumes[trackIndex]==-1 && trackID!=0)
+                    if (ev.Number == (byte)Controller.VolumeCourse && Root.volumes[trackIndex] == -1 && trackID != 0)
                         Assembler.writeVolume(ev.Value);
                     //else if (ev.Number == (byte)Controller.VolumeFine)
                     //    Assembler.writeVolume(ev.Value);
-                    else if (ev.Number == (byte)Controller.PanPositionCourse)                      
-                        Assembler.writePanning(ev.Value);
+                    else if (ev.Number == (byte)Controller.PanPositionCourse)
+                    {
+                        targetPan = ev.Value;
+                        if (isAnyVoiceAllocated())
+                        {
+                            Assembler.writePanning(ev.Value);
+                            currentPan = ev.Value;
+                        }
+                    }
                     else if (ev.Number == (byte)Controller.PanPositionFine)
-                        Assembler.writePanning(ev.Value);
+                    {
+                        targetPan = ev.Value;
+                        if (isAnyVoiceAllocated())
+                        {
+                            Assembler.writePanning(ev.Value);
+                            currentPan = ev.Value;
+                        }
+                    }
                     else if (ev.Number == (byte)Controller.RegisteredParameterCourse)
                         waitParameterNumber = ev.Value;
                     else if (ev.Number == (byte)Controller.DataEntryCourse || ev.Number == (byte)Controller.DataEntryFine)
-                        if (waitParameterNumber > -1) { 
-                            message($"rpn prm 0x{waitParameterNumber:X4} -> {ev.Value}",MessageLevel.INFO);
-                            if (waitParameterNumber==0) // RPN 0x0000 PITCH WHEEL RANGE
+                        if (waitParameterNumber > -1)
+                        {
+                            message($"rpn prm 0x{waitParameterNumber:X4} -> {ev.Value}", MessageLevel.INFO);
+                            if (waitParameterNumber == 0) // RPN 0x0000 PITCH WHEEL RANGE
                                 Assembler.writePitchSensitivity(ev.Value);
                             waitParameterNumber = -1;
                         }

@@ -30,6 +30,7 @@ namespace JaiMaker
         public static int[] programs = new int[64];
         public static int[] volumes = new int[16];
         public static int[] offsets = new int[16];
+        public static bool[] dynamics = new bool[16];
         public static int Tempo = 120;
 
 

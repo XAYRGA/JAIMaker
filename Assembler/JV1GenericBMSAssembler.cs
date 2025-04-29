@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JaiSeqX.JAI;
+using JaiSeqX.JAI.Seq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +33,13 @@ namespace JaiMaker.Assembler
             output.Write(bankID);
         }
 
+        public override void writeCall(byte condition, int addr)
+        {
+            output.Write((byte)JaiSeqEvent.CALL_COND);
+            output.Write(condition);
+            util.writeInt24BE(output, addr);
+        }
+
         public override void writeExtended(int data, params object[] arguments)
         {
             throw new NotImplementedException();
@@ -39,6 +48,18 @@ namespace JaiMaker.Assembler
         public override void writeFinish()
         {
             output.Write((byte)0xFF);
+        }
+
+        public override void writeInterrupt(byte level, int addr)
+        {
+            output.Write((byte)JaiSeqEvent.INTERRUPT);
+            output.Write(level);
+            util.writeInt24BE(output, addr);
+        }
+
+        public override void writeInterruptReturn()
+        {
+            output.Write((byte)0xE3);
         }
 
         public override void writeJump(int address)
@@ -129,6 +150,18 @@ namespace JaiMaker.Assembler
             throw new NotImplementedException();
         }
 
+        public override void writeReturn(byte cond = 0)
+        {
+            output.Write((byte)JaiSeqEvent.RET_COND);
+            output.Write(cond);
+        }
+
+        public override void writeSync(ushort arg)
+        {
+            output.Write((byte)JaiSeqEvent.SYNC_CPU);
+            output.Write(arg);
+        }
+
         public override void writeTempoChange(short tempo)
         {
             output.Write((byte)0xFD);
@@ -159,6 +192,9 @@ namespace JaiMaker.Assembler
 
            // output.Write((ushort)(((float)volume / (float)0x7F) * 65534));
         }
+
+
+       
 
         public override void writeWait(int delay)
         {

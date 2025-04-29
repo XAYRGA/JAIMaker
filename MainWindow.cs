@@ -216,7 +216,10 @@ namespace JaiMaker
                         midiChannelData.GetControlFromPosition(1, i).Enabled = rer;
                         midiChannelData.GetControlFromPosition(3, i).Enabled = rer; 
                         midiChannelData.GetControlFromPosition(0, i).ForeColor = rer ? Color.Green : Color.Red;
-             
+                        midiChannelData.GetControlFromPosition(4, i).Enabled = rer;
+                        midiChannelData.GetControlFromPosition(5, i).Enabled = rer;
+                        midiChannelData.GetControlFromPosition(6, i).Enabled = rer;
+
                 }
                 exportBMS.Enabled = true;
                 if (File.Exists("JaiSeqX.exe"))
@@ -242,11 +245,18 @@ namespace JaiMaker
                 var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
                 var volume = (TrackBar)midiChannelData.GetControlFromPosition(4, i);
                 var offset = (NumericUpDown)midiChannelData.GetControlFromPosition(5, i);
+                var dyn = (CheckBox)midiChannelData.GetControlFromPosition(6, i);
+
+                if (dyn.Checked)
+                    dyn.Text = "Yes";
+                else 
+                    dyn.Text = "No";
 
                 Root.programs[i] = (int)program.Value;
                 Root.instrumentBanks[i] = (int)bank.Value;
                 Root.volumes[i] = (int)volume.Value;
                 Root.offsets[i] = (int)offset.Value;
+                Root.dynamics[i] = dyn.Checked;
             }
         }
 
@@ -260,11 +270,13 @@ namespace JaiMaker
                 var program = (NumericUpDown)midiChannelData.GetControlFromPosition(2, i);
                 var volume = (TrackBar)midiChannelData.GetControlFromPosition(4, i);
                 var offset = (NumericUpDown)midiChannelData.GetControlFromPosition(5, i);
+                var dynamic = (CheckBox)midiChannelData.GetControlFromPosition(6, i);
 
                 program.Value = Root.programs[i];
                 bank.Value = Root.instrumentBanks[i];
                 volume.Value = Root.volumes[i];
                 offset.Value = Root.offsets[i];
+                dynamic.Checked = Root.dynamics[i];
             }
         }
 
@@ -479,12 +491,13 @@ namespace JaiMaker
                 return;
             var fileHandle = saveJAIMDialog.OpenFile();
             var writer = new BinaryWriter(fileHandle);
-            var projectFile = new JAIMakerProjectFileV3();
+            var projectFile = new JAIMakerProjectFileV4();
             projectFile.banks = Root.instrumentBanks;
             projectFile.programs = Root.programs;
             projectFile.Remap = RemapInfo;
             projectFile.volumes = Root.volumes;
             projectFile.offsets = Root.offsets;
+            projectFile.dynamics = Root.dynamics; 
             projectFile.save(writer);
             fileHandle.Flush();
             fileHandle.Close();
@@ -496,7 +509,7 @@ namespace JaiMaker
                 return;
             var fileHandle = openJAIMDialog.OpenFile();
             var reader = new BinaryReader(fileHandle);
-            var projectFile = new JAIMakerProjectFileV3();
+            var projectFile = new JAIMakerProjectFileV4();
             try
             {
                 projectFile.load(reader);
@@ -504,6 +517,7 @@ namespace JaiMaker
                 Root.instrumentBanks = projectFile.banks;
                 Root.volumes = projectFile.volumes;
                 Root.offsets = projectFile.offsets;
+                Root.dynamics = projectFile.dynamics;
                 RemapInfo = projectFile.Remap;
                 fillChannelData();
 
@@ -531,6 +545,11 @@ namespace JaiMaker
         }
 
         private void label25_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
         {
 
         }
