@@ -157,13 +157,18 @@ namespace JaiMaker
 
         private void preScanSequence()
         {
+            message("Pre-scanning sequence for metadata...");
             for (int trk = 0; trk < MidiSeq.Tracks.Count; trk++)
             {
                 var mTrack = MidiSeq.Tracks[trk];
+                var totalDelta = 0l;
                 for (int i = 0; i < mTrack.Events.Count; i++)
                 {
                     var currentEvent = mTrack.Events[i];
-                    if (currentEvent is MidiSharp.Events.Meta.Text.BaseTextMetaMidiEvent)
+                    totalDelta += currentEvent.DeltaTime;
+                    if (currentEvent is MidiSharp.Events.Meta.Text.CuePointTextMetaMidiEvent ||
+                    currentEvent is MidiSharp.Events.Meta.Text.LyricTextMetaMidiEvent ||
+                    currentEvent is MidiSharp.Events.Meta.Text.MarkerTextMetaMidiEvent)
                     {
                         var ev = (MidiSharp.Events.Meta.Text.BaseTextMetaMidiEvent)currentEvent;
                         if (ev.Text == "JLOOP" || ev.Text == "LOOP")
@@ -171,10 +176,26 @@ namespace JaiMaker
                             HasLegacyLoop = true;
                             message("!!! Legacy JLOOP method detected! Tempo changes not supported!", MessageLevel.WARNING);
                         }
-                    }             
+
+                        if (ev.Text == "MASTER_LOOP" || ev.Text == "MLOOP" || ev.Text == "loopStart" || ev.Text == "startLoop" || ev.Text == "loop_start")
+                        {
+                            MasterLoopDelta = totalDelta;
+                            message($"Trapped loop_start event -- delta offset {totalDelta}");
+                        }
+
+
+                        if (ev.Text == "MASTER_LOOP_END" || ev.Text == "MLOOPEND" || ev.Text == "loopEnd" || ev.Text == "endLoop" || ev.Text == "loop_end")
+                        {
+                            MasterLoopDeltaEnd = totalDelta;
+                            message("Trapped MASTER_LOOP_END -- terminating track compilation here to save space.");
+                            return;
+                        }
+                    }
                 }
             }
         }
+
+
 
         public void processSequence()
         {
@@ -442,7 +463,7 @@ namespace JaiMaker
                     else if (ev.Number == (byte)Controller.DataEntryCourse || ev.Number == (byte)Controller.DataEntryFine)
                         if (waitParameterNumber > -1)
                         {
-                            message($"rpn prm 0x{waitParameterNumber:X4} -> {ev.Value}", MessageLevel.INFO);
+                            //message($"rpn prm 0x{waitParameterNumber:X4} -> {ev.Value}", MessageLevel.INFO);
                             if (waitParameterNumber == 0) // RPN 0x0000 PITCH WHEEL RANGE
                                 Assembler.writePitchSensitivity(ev.Value);
                             waitParameterNumber = -1;
@@ -468,22 +489,6 @@ namespace JaiMaker
                     if (ev.Text == "JLOOP" || ev.Text == "LOOP")
                         saveAddress("LOOP");
 
-                    if (ev.Text == "MASTER_LOOP" || ev.Text == "MLOOP" || ev.Text == "loopStart" || ev.Text == "startLoop" || ev.Text=="loop_start")
-                    {
-                        MasterLoopDelta = totalDelta;
-                        message($"Trapped loop_start event -- delta offset {totalDelta}");
-                    }
-                    
-
-                    if (ev.Text == "MASTER_LOOP_END" || ev.Text == "MLOOPEND" || ev.Text=="loopEnd" || ev.Text == "endLoop" || ev.Text == "loop_end")
-                        if (getAddress("MASTER_LOOP") > 0)
-                        {
-                            MasterLoopDeltaEnd = totalDelta;
-                            message("Trapped early MASTER_LOOP_END -- terminating track compilation here to save space.");
-                            Assembler.writeJump((int)getAddress("MASTER_LOOP"));
-                            Assembler.writeFinish();
-                            return;
-                        }
                     Assembler.writePrint($"ev:{ev.Text}");
                 }
             }
