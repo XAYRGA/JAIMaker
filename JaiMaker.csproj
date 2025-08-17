@@ -118,10 +118,9 @@
     <Compile Include="JAI\AAFFile.cs" />
     <Compile Include="JAI\BAAFile.cs" />
     <Compile Include="JAI\Helpers.cs" />
+    <Compile Include="JAI\Seq\Subroutine.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="JAI\Seq\JaiEventType.cs" />
-    <Compile Include="JAI\Seq\JSequenceState.cs" />
-    <Compile Include="JAI\Seq\Subroutine.cs" />
     <Compile Include="JAI\Types\Instrument.cs" />
     <Compile Include="JAI\Types\InstrumentBank.cs" />
     <Compile Include="JAI\Types\WSYS\WaveSystem.cs" />

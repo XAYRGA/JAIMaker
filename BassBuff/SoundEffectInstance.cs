@@ -29,8 +29,6 @@ namespace JaiSeqX.Player.BassBuff
             handle = bassHandle; // Store the handle
             Bass.BASS_ChannelGetAttribute(handle, BASSAttribute.BASS_ATTRIB_FREQ, ref baseSRate); // Store the original sample rate (for pitch bending)
             var sz = Bass.BASS_ChannelGetLength(handle);
-            
- 
 
             if (loop) // If we loop
                 syncHandle = Bass.BASS_ChannelSetSync(handle, BASSSync.BASS_SYNC_POS | BASSSync.BASS_SYNC_MIXTIME, loopend, Engine.globalLoopProc, new IntPtr(loopstart));// Set the global loop proc to take place at the loop end position, then return to the start.
@@ -44,10 +42,9 @@ namespace JaiSeqX.Player.BassBuff
                 return iPitch;
             }
             set
-            {//
+            {
                 Bass.BASS_ChannelSetAttribute(handle, BASSAttribute.BASS_ATTRIB_FREQ, baseSRate * value); // Change the frequency of the sound
                 iPitch = value;
-
             }
         }
    

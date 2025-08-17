@@ -20,6 +20,7 @@ namespace JaiMaker
         public static BMSChannelManager channelManager = new BMSChannelManager();
         static string keyOrderString = @"1234567890-=qwertyuiop[]\asdfghjkl;'zxcvbnm,./";
         static int[] pitches;
+        public static int lastNote = 0;
         public static void init()
         {
             var lastPitch = 0;
@@ -65,6 +66,7 @@ namespace JaiMaker
                                 var pmul = prog.Pitch * key.Pitch;
                                 var vmul = prog.Volume * key.Volume;
                                 var real_pitch = Math.Pow(2, ((note - wave.key) * pmul) / 12);
+                                lastNote = note;
                                 var true_volume = (Math.Pow(((float)vel + Root.keyOffset) / 127, 2) * vmul) * 0.5;
                                 sound.Volume = (float)(true_volume * 0.6);
                                 sound.ShouldFade = true;

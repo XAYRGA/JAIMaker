@@ -31,6 +31,7 @@ namespace JaiMaker
         public static int[] volumes = new int[16];
         public static int[] offsets = new int[16];
         public static bool[] dynamics = new bool[16];
+        public static bool SwingTempo = false;
         public static int Tempo = 120;
 
 

@@ -216,5 +216,10 @@ namespace JaiMaker.Assembler
         {
             throw new NotImplementedException();
         }
+
+        public override void writeWaitRegister(byte register)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

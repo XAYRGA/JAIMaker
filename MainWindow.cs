@@ -70,6 +70,7 @@ namespace JaiMaker
                 //Console.WriteLine("key {0}", channel);
                 Keyboard.startSound((byte)(channel));
                 keysPressed[kbe.KeyValue] = true;
+                label27.Text = $"Last Note: {Keyboard.lastNote}";
             }
         }
 
@@ -80,6 +81,7 @@ namespace JaiMaker
             var channel = (byte)(char)kbe.KeyValue + 32;
             Keyboard.stopSound((byte)(channel));
             keysPressed[kbe.KeyValue] = false;
+      
         }
 
         private void EnableFunctions()
@@ -257,6 +259,7 @@ namespace JaiMaker
                 Root.volumes[i] = (int)volume.Value;
                 Root.offsets[i] = (int)offset.Value;
                 Root.dynamics[i] = dyn.Checked;
+                Root.SwingTempo = checkBox17.Checked;
             }
         }
 
@@ -552,6 +555,13 @@ namespace JaiMaker
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox17_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox17.Checked)
+                MessageBox.Show("tempo changes are broken now :)");
+            
         }
     }
 }

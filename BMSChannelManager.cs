@@ -81,6 +81,8 @@ namespace JaiSeqX.Player
 
         float[] bendPitchBase;
 
+        int lastNote = 0;
+
         public BMSChannelManager()
         {
             

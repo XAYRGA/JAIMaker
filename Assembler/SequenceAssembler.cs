@@ -31,6 +31,7 @@ namespace JaiMaker.Assembler
         public abstract void writeTimedEvent(byte param, short time, short value);
         public abstract void writeRegister(byte register, short value);
         public abstract void writeTempoChange(short tempo);
+        public abstract void writeWaitRegister(byte register);
         public abstract void writeTimebaseChange(short timebase);
         public abstract void writeOpenTrack(byte trkId, int address);
         public abstract void writeBankChange(byte bankID);

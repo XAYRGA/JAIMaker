@@ -215,6 +215,9 @@ namespace JaiMaker
             Assembler.writeTempoChange((short)MidiSeq.TicksPerBeatOrFrame);
             message($"Assembler ticks per frame {(short)MidiSeq.TicksPerBeatOrFrame}");
             Assembler.writeTimebaseChange((short)120);
+
+      
+
             Assembler.writePrint("Assembled by JAIMaker!");
             for (int trk = 0; trk < MidiSeq.Tracks.Count; trk++)
             {
@@ -285,7 +288,8 @@ namespace JaiMaker
                 Assembler.writeCall(0, getAddress("dynamic_call_address"));
                 //Assembler.writePrint($"Trk {trackID} dynamic");
                 message("Integrating dynamic music call....");
-            }
+            } 
+       
 
 
            
@@ -383,8 +387,20 @@ namespace JaiMaker
 
 
                         var voice = allocateVoice(ev.Note);
+                        var note = ev.Note + Root.offsets[trackIndex];
+                        /*
+                        if (trackID==16)
+                        {
+                            if (ev.Note == 45 || ev.Note == 38 || ev.Note == 40)
+                                note = 31;
+                            if (ev.Note == 36)
+                                note = 26;
+                            if (ev.Note == 49 || ev.Note == 42 || ev.Note == 46 || ev.Note == 51)
+                                note = 59;
+                        }
+                        */
                         if (voice > -1)
-                            Assembler.writeNoteOn(ev.Note + Root.offsets[trackIndex], ev.Velocity, (byte)voice);
+                            Assembler.writeNoteOn(note, ev.Velocity, (byte)voice);
                         else
                             message($"! Voice overflow on track {trackID}", MessageLevel.ERROR);
                     }
@@ -403,6 +419,17 @@ namespace JaiMaker
                 {
                     var ev = (MidiSharp.Events.Meta.TempoMetaMidiEvent)currentEvent;
                     Assembler.writeTimebaseChange((short)(60000000 / ev.Value));
+
+                    if (trackID == 0 && Root.SwingTempo)
+                    {
+                        message("Tempo set! Integrating swing tempo loop");
+                        Assembler.writeSync(0xE00); // BGM Director enable;
+                        saveAddress("swingTempoAddr");
+                        Assembler.writeSync(0x2E00); // Read update beat from engine;
+                        Assembler.writeWaitRegister(3);
+                        Assembler.writeJump(getAddress("swingTempoAddr"));
+                        Assembler.writeFinish();
+                    }
                 }
                 else if (currentEvent is MidiSharp.Events.Voice.ProgramChangeVoiceMidiEvent)
                 {

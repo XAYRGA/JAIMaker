@@ -193,8 +193,12 @@ namespace JaiMaker.Assembler
            // output.Write((ushort)(((float)volume / (float)0x7F) * 65534));
         }
 
+        public override void writeWaitRegister(byte register)
+        {
+            output.Write((byte)0xCF);
+            output.Write(register);
+        }
 
-       
 
         public override void writeWait(int delay)
         {
@@ -227,5 +231,6 @@ namespace JaiMaker.Assembler
             }
         }
 
+    
     }
 }
